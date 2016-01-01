@@ -1,0 +1,31 @@
+{
+  "name": "gitlab-repoman",
+  "version": "1.0.0",
+  "description": "Gitlab course repository manager.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test-rm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "umgit:mmdarden/gitlab-repoman.git"
+  },
+  "keywords": [
+    "Gitlab",
+    "course",
+    "repository",
+    "repo",
+    "manager",
+    "umich"
+  ],
+  "author": "Marcus M. Darden",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3",
+    "passport": "^0.3.2",
+    "pg": "^4.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.15.1",
+    "sequelize-cli": "^2.2.1"
+  }
+}
