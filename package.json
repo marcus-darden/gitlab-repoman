@@ -4,6 +4,7 @@
   "description": "Gitlab course repository manager.",
   "main": "index.js",
   "scripts": {
+    "start": "npm install && node index.js",
     "test": "test-rm"
   },
   "repository": {
