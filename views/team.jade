@@ -1,0 +1,36 @@
+extends layout
+
+block main
+
+  - if (id) 
+
+    form.form-horizontal#team_edit
+      .form-group
+        label.col-md-2.control-label Group
+        .col-md-6
+          input.form-control(type='text', name="name", placeholder='e.x. The Rabid Ocelots', value="#{name}")
+        .col-md-4
+          input.form-control(type='text', name="id", value="#{id}", readonly)
+      
+      .form-group
+        label.col-md-2.control-label Members
+        .col-md-10
+          - each member in members
+            .row.member
+              .col-xs-3
+                img.pic(src="#{member.pic}")
+              .col-xs-9
+                h3.name= member.name
+                .id= member.github
+                .email= member.email
+        
+      .form-group
+        .col-md-offset-2.col-md-10
+          button.btn.btn-success.btn-block(type='submit') Save Team
+          .btn-group.btn-group-justified
+            a.btn.btn-warning(href="/quit/#{id}") Leave Team
+            a.btn.btn-primary(href="/user") Edit User
+            a.btn.btn-danger(href="/logout") Logout
+  - else 
+
+    h3 Team Does Not Exist
