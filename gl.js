@@ -3,12 +3,13 @@
 
 var express = require('express');
 var passport = require('passport');
+var jade = require('jade');
 //var util = require('util');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 //var GitHubStrategy = require('passport-github2').Strategy;
-var partials = require('express-partials');
+//var partials = require('express-partials');
 
 
 //var GITHUB_CLIENT_ID = '76fe4df17af9c751a24d';
@@ -78,8 +79,9 @@ var app = express();
 
 // configure Express
 app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-app.use(partials());
+app.set('view engine', 'jade');
+app.set('view options', { layout: false });
+//app.use(partials());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
@@ -92,8 +94,8 @@ app.use(express.static(__dirname + '/public'));
 
 
 app.get('/', function(req, res){
-    console.log('HELP!');
-  res.render('index', { user: req.user });
+    console.log('PAGE!');
+  res.render('page', { user: req.user });
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
