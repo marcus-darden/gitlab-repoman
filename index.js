@@ -20,7 +20,7 @@ passport.use(new GitlabStrategy({
     callbackURL: 'http://127.0.0.1:3000/auth/gitlab/callback'
   },
   function(token, tokenSecret, profile, done) {
-    console.dir(profile);
+    //console.dir(profile);
     process.nextTick(function() {
       return done(null, profile);
     });
@@ -36,7 +36,12 @@ passport.use(new GitlabStrategy({
 //   have a database of user records, the complete GitHub profile is serialized
 //   and deserialized.
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  var u = { displayName: user.displayName,
+            uniqname: user.username,
+            pic: user.avatar,
+            team_id: 'Team Vim' };
+  console.dir(u);
+  done(null, u);
 });
 
 passport.deserializeUser(function(obj, done) {
@@ -66,7 +71,6 @@ app.use('/static', express.static(__dirname + '/public'));
 // Routes
 
 app.get('/', function(req, res){
-    console.log('PAGE!');
   res.render('index', { classname: 'EECS 494',
                         semester: 'Winter',
                         year: 2016,
@@ -74,6 +78,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/user', ensureAuthenticated, function(req, res){
+  //console.dir(req.user);
   res.render('user', { user: req.user,
                        id: 1 });
 });
