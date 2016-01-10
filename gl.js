@@ -1,9 +1,9 @@
 'use strict';
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+//process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 var express = require('express');
 var passport = require('passport');
-var util = require('util');
+//var util = require('util');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
