@@ -12,6 +12,7 @@ var methodOverride = require('method-override');
 var GitlabStrategy = require('passport-gitlab').Strategy;
 var GITLAB_APP_KEY = '591ca4de44b94b972d58fc37a89141fd9c8495b4624b136573f6cf21b2bd7c9e';
 var GITLAB_APP_SECRET = '14eef3ebae52699d3ecf8a36244ba67b93ecb80406f55a69da8b97481ec8d857';
+var AUTH_USERS = ['mmdarden'];
  
 passport.use(new GitlabStrategy({
     clientID: GITLAB_APP_KEY,
@@ -36,10 +37,12 @@ passport.use(new GitlabStrategy({
 //   have a database of user records, the complete GitHub profile is serialized
 //   and deserialized.
 passport.serializeUser(function(user, done) {
-  var u = { displayName: user.displayName,
-            uniqname: user.username,
+  var u = { name: user.displayName,
+            github: user.username,
             pic: user.avatar,
-            team_id: 'Team Vim' };
+            email: user.username + '@umich.edu',
+            uniqname: user.username,
+            team_id: '' };
   console.dir(u);
   done(null, u);
 });
@@ -50,6 +53,7 @@ passport.deserializeUser(function(obj, done) {
 
 
 var app = express();
+app.locals.pretty = true;
 
 // configure Express
 app.set('views', __dirname + '/views');
@@ -77,10 +81,22 @@ app.get('/', function(req, res){
                         user: req.user });
 });
 
-app.get('/user', ensureAuthenticated, function(req, res){
+app.get('/user', ensureAuthenticated, function(req, res) {
   //console.dir(req.user);
   res.render('user', { user: req.user,
                        id: 1 });
+});
+
+app.post('/key', ensureAuthenticated, function(req, res) {
+  var user = req.user;
+  var team = { id: req.body.key,
+               name: '',
+               creator: user.uniqname, // user = getGHcreds(github) --- "creator": user["github"],
+               size: 0 };
+  console.log('/key  team:');
+  console.dir(team);
+  // teams_db.insert(team);
+  res.send('done');
 });
 
 app.get('/login', function(req, res){
@@ -110,4 +126,11 @@ app.listen(3000);
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/');
+}
+
+function ensureAdmin(req, res, next) {
+  if (AUTH_USERS.indexOf(req.user.uniqname) < 0)
+    res.status(403).send({status: 403, message: 'Admin access only', type:'internal'});
+  else
+    return next();
 }

@@ -32,7 +32,7 @@ block main
             
             input.form-control(type='text', name="team_id", placeholder='Paste Key to Join Team', value="#{user.team_id}")
             span.input-group-btn
-              a.btn.new_team(href="#") Or Start New Team
+              a.btn.btn-success.new_team(href="#") Or Start New Team
               a.btn.btn-danger.leave_team(href="/quit/#{user.team_id}", style="display:none") Leave
               a.btn.btn-success.edit_team(href="/team/#{user.team_id}", style="display:none") Edit Team
 
