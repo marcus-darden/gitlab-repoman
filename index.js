@@ -178,13 +178,16 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.get('/auth/gitlab',
-  passport.authenticate('gitlab'),
-  function(req, res){}  // Redirected to GitLab machine, this is never called
+app.get('/auth/:strategy',
+  function(req, res, next) {
+    passport.authenticate(req.params.strategy)(req, res, next);
+  }
 );
 
-app.get('/auth/gitlab/callback', 
-  passport.authenticate('gitlab', { failureRedirect: '/login' }),
+app.get('/auth/:strategy/callback', 
+  function(req, res, next) {
+    passport.authenticate(req.params.strategy, { failureRedirect: '/login' })(req, res, next);
+  },
   function(req, res) {
     res.redirect('/user');
   }
