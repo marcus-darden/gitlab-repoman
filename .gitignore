@@ -2,3 +2,4 @@
 node_modules
 snippets/*
 *.swo
+npm-debug.log
