@@ -28,13 +28,13 @@ passport.deserializeUser(function(obj, done) {
 
 
 fs
-  .readdirSync(__dirname)
+  .readdirSync(path.join(__dirname, 'strategies'))
   .filter(function (file) {
-    return file.indexOf('.') !== 0 && file !== 'index.js' && file.substr(-3) === '.js';
+    return file.indexOf('.') !== 0 && file.substr(-3) === '.js';
   })
   .forEach(function (file) {
     var name = file.substring(0, file.length - 3);  // remove extension
-    passport.use(name, require(path.join(__dirname, file)));
+    passport.use(name, require(path.join(__dirname, 'strategies', file)));
   });
 
 module.exports = passport;

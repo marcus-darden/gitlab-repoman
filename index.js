@@ -1,7 +1,8 @@
 'use strict';
 
 var express = require('express');
-var passport = require('./auth');
+var auth = require('./auth');
+var passport = require('passport');
 var jade = require('jade');
 //var util = require('util');
 var session = require('express-session');
