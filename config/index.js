@@ -1,10 +1,8 @@
 'use strict';
 
-//var dbconf = require('./database');
-
 module.exports = {
   // Database config (imported from database.js)
-  // database: dbconf,
+  database: require('./database'),  // TODO add the fs require mechanism
 
 
   // Gitlab parameters
