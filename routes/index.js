@@ -15,19 +15,3 @@ fs
   });
 
 module.exports = routes;
-
-/*
-var express = require('express');
-var router  = express.Router();
-
-router.get('/', function(req, res) {
-    res.render('index', {
-        classname: 'EECS XXX',
-        semester: 'Winter',
-        year: 2016
-//    });
-  });
-});
-
-module.exports = router;
- */
