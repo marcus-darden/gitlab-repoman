@@ -13,9 +13,6 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING
       },
-      team_id: {
-        type: Sequelize.CHAR(11)
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
