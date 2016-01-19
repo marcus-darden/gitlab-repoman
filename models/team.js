@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       allowNull: false,
       primaryKey: true,
-      DataTypes.CHAR(11),
+      type: DataTypes.CHAR(11)
     },
     name: DataTypes.STRING
   }, {
