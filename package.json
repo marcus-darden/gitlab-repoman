@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "artlogic": "npm install && node index.js",
-    "test": "test-rm"
+    "test": "test-rm",
+    "resetdb": "dropdb repoman_development && createdb repoman_development"
   },
   "repository": {
     "type": "git",
