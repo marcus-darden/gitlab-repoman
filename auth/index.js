@@ -12,18 +12,21 @@ var passport = require('passport');
 //   have a database of user records, the complete GitHub profile is serialized
 //   and deserialized.
 passport.serializeUser(function(user, done) {
-  var u = { name: user.displayName,
-            github: user.username,
-            pic: user.avatar,
-            email: user.username + '@umich.edu',
-            uniqname: user.username,
-            team_id: '' };
-  console.dir(u);
-  done(null, u);
+  console.log('serialize');
+//  console.dir(user);
+//  var u = { username: user.username,
+//            display_name: user.displayName,
+//            avatar: user.avatar,
+//            team_id: '' };
+//  console.dir(u);
+  done(null, user.username);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(username, done) {
+  console.log('deserialize');
+  User.findById(username, function(err, user) {
+    done(null, obj);
+  });
 });
 
 
