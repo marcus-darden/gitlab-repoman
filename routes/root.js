@@ -3,6 +3,7 @@
 var AUTH_USERS = ['mmdarden'];
 
 var express = require('express');
+var models = require('../models');
 var router = express.Router();
   
 
@@ -34,12 +35,33 @@ router.get('/user', ensureAuthenticated, function(req, res) {
 });
 
 router.post('/user', ensureAuthenticated, function(req, res) {
-        //user_info["uniqname"] = request.json["uniqname"]
+  var user = req.user;
+  var team_id = req.body.team_id;
+  console.log('/user#POST');
+  console.dir(user);
+  console.dir(req.body);
+  //user_info = getGHcreds(github)
+  //user = users_db.find_one({ "github": user_info["github"] })
+  //user_info["username"] = request.json["username"]
         //team_id = user_info["team_id"] = request.json["team_id"]
-
-        //team = teams_db.find_one({"id":team_id})
-        var team = { id: 'Team Vim',
-                     size: 2 };
+  models.Team.findById(team_id).then(function(team) {
+    if (!team)
+      res.send({error: 'Invalid Team ID!'});
+    else {
+      console.dir(team);
+      if (team.size >= 3 && user.team_id != team_id)
+        res.send({ error: 'Team is Full! Maximum Team Size is 3' });
+      user.update({ team_id: team_id }).then(function(user) {
+        team.update({ size: team.size + 1 }).then(function(team) {
+          res.send({ success: 'ok' });
+        });
+      });
+    }
+  });
+});
+  //team = teams_db.find_one({"id":team_id})
+    //    var team = { id: 'Team Vim',
+    //                 size: 2 };
 
         //#check if team exists
         //if (team_id != "") and (not team):
@@ -55,12 +77,11 @@ router.post('/user', ensureAuthenticated, function(req, res) {
         //# increment user count for team 
         //if team and (not user or user["team_id"] != team_id):
             //# user is new to the team
-            team['size'] += 1;
+            //team['size'] += 1;
             //teams_db.update({ "id": team_id }, team)
 
         //return json.dumps({"success" : 'ok'})
-        res.send({ success: 'ok' });
-});
+        //res.send({ success: 'ok' });
 
 /*
 @app.route('/user', methods=["GET","POST"])
@@ -107,12 +128,13 @@ router.post('/key', ensureAuthenticated, function(req, res) {
   var user = req.user;
   var team = { id: req.body.key,
                name: '',
-               creator: user.uniqname, // user = getGHcreds(github) --- "creator": user["github"],
+               creator: user.username,
                size: 0 };
   console.log('/key  team:');
   console.dir(team);
-  // teams_db.insert(team);
-  res.send('done');
+  models.Team.create(team).then(function(team) {
+    res.send('done');
+  });
 });
 
 module.exports = router;
