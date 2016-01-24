@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var passport = require('passport');
+var models = require('../models');
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -12,8 +13,6 @@ var passport = require('passport');
 //   have a database of user records, the complete GitHub profile is serialized
 //   and deserialized.
 passport.serializeUser(function(user, done) {
-  console.log('serialize');
-//  console.dir(user);
 //  var u = { username: user.username,
 //            display_name: user.displayName,
 //            avatar: user.avatar,
@@ -23,9 +22,11 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(username, done) {
-  console.log('deserialize');
-  User.findById(username, function(err, user) {
-    done(null, obj);
+  models.User.findByPrimary(username).then(function(user) {
+    done(null, user);
+  }).catch(function(err) {
+    console.log(err);
+    done(new Error('User name \'' + username + '\' does not exist'));
   });
 });
 
