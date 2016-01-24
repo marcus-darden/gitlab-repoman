@@ -22,7 +22,7 @@ $(document).ready(function() {
 		if(e) e.preventDefault();
 
 		var obj = {
-			uniqname: $("input[name='uniqname']").val(),
+			username: $("input[name='uniqname']").val(),
 			team_id: $("input[name='team_id']").val()
 		}
 
