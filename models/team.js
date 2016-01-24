@@ -6,7 +6,9 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       type: DataTypes.CHAR(11)
     },
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    size: DataTypes.INTEGER,
+    creator: DataTypes.CHAR(8)
   }, {
     classMethods: {
       associate: function(models) {
