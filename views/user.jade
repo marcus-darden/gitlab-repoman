@@ -11,7 +11,7 @@ block main
         .col-md-9
           .row
             .col-xs-3
-              img.pic(src="#{user.pic}")
+              img.pic(src="#{user.avatar}")
             .col-xs-9
               h3.name= name
               .id= github
@@ -21,7 +21,7 @@ block main
         label.col-md-3.control-label Uniqname
         .col-md-9
           .input-group
-            input.form-control(type='text', name="uniqname", placeholder='uniqname', value="#{user.uniqname}", required)
+            input.form-control(type='text', name="uniqname", placeholder='uniqname', value="#{user.username}", required, readonly)
             span.input-group-btn
               a.btn(href="#") @umich.edu
 
@@ -30,7 +30,7 @@ block main
         .col-md-9
           .input-group
             
-            input.form-control(type='text', name="team_id", placeholder='Paste Key to Join Team', value="#{user.team_id}")
+            input.form-control(type='text', name="team_id", placeholder='Paste Key to Join Team', value="#{user.team_id ? user.team_id : ''}")
             span.input-group-btn
               a.btn.btn-success.new_team(href="#") Or Start New Team
               a.btn.btn-danger.leave_team(href="/quit/#{user.team_id}", style="display:none") Leave
