@@ -2,8 +2,8 @@
 
 var config = {
   development: {
-    username: "root",
-    password: null,
+    username: "repoman",
+    password: "repoman",
     database: "repoman_development",
     host: "127.0.0.1",
     dialect: "postgres",
@@ -13,8 +13,8 @@ var config = {
     }
   },
   test: {
-    username: "root",
-    password: null,
+    username: "repoman",
+    password: "repoman",
     database: "repoman_test",
     host: "127.0.0.1",
     dialect: "postgres",
@@ -24,8 +24,8 @@ var config = {
     }
   },
   production: {
-    username: "root",
-    password: null,
+    username: "repoman",
+    password: "repoman",
     database: "repoman_production",
     host: "127.0.0.1",
     dialect: "postgres",
