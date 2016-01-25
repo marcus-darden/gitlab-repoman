@@ -69,4 +69,45 @@ router.post('/key', ensureAuthenticated, function(req, res) {
   });
 });
 
+router.get('/team/:id', ensureAuthenticated, function(req, res) {
+  var user = req.user;
+  models.Team.findById(req.params.id).then(function(team) {
+    if (!team)
+      team = {};
+    team.members = [];
+    models.User.findAll({ where: { team_id: req.params.id }}).then(function(users) {
+      var ii;
+      for (ii = 0; ii < users.length; ++ii)
+        if (users[ii].username === user.username)
+          team.members = users;
+      res.render('team', { team: team });
+    }); 
+  });
+});
+
+router.post('/team/:id', ensureAuthenticated, function(req, res) {
+  models.Team.findById(req.params.id).then(function(team) {
+    team.update({ name: req.body.name }).then(function(team) {
+      res.send({ success: 'ok' });
+    });
+  });
+});
+
+router.get('/team/:id/quit', ensureAuthenticated, function(req, res) {
+  var user = req.user;
+  var user_team_id = user.team_id;
+  user.update({ team_id: null }).then(function(user) {
+    models.Team.findById(req.params.id).then(function(team) {
+      if (team && user_team_id === req.params.id) {
+        team.size -= 1;
+        if (team.size <= 0)
+          models.Team.destroy({ where: { id: team.id }});
+        else
+          team.update();
+      }
+      res.redirect('/user');
+    });
+  });
+});
+
 module.exports = router;

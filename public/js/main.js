@@ -17,7 +17,7 @@ $(document).ready(function() {
 	function updateBtns(key) {
 		if(!key) key = $("input[name='team_id']").val();
 		$(".edit_team").attr("href","/team/"+key)
-		$(".leave_team").attr("href","/quit/"+key)
+		$(".leave_team").attr("href","/team/"+key+"/quit")
 	}
 	
 	function saveUserInfo(e) {
