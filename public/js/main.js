@@ -5,7 +5,9 @@ $(document).ready(function() {
 
 		var key = Math.random().toString(36).substring(7);
 		$.post("/key", { key: key }, function(data) {
+            //console.log('Pre-key: ' + key);
 			$("input[name='team_id']").val(key);
+            //console.log('Input-key: ' + $("input[name='team_id']").val());
 			updateBtns(key);
 			console.log(data);
 			saveUserInfo(null);

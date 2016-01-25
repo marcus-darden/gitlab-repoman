@@ -29,11 +29,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/static', express.static(__dirname + '/public'));
 
+// Routes
 var routes = require('./routes');
 app.use('/', routes.root);
 app.use('/auth', routes.auth);
-// Routes
 
 app.listen(3000);
-
-
