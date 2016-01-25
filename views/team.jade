@@ -2,35 +2,34 @@ extends layout
 
 block main
 
-  - if (id) 
+  - if (team.id)
 
     form.form-horizontal#team_edit
       .form-group
         label.col-md-2.control-label Group
         .col-md-6
-          input.form-control(type='text', name="name", placeholder='e.x. The Rabid Ocelots', value="#{name}")
+          input.form-control(type='text', name="name", placeholder='e.x. The Rabid Ocelots', value="#{team.name || ''}")
         .col-md-4
-          input.form-control(type='text', name="id", value="#{id}", readonly)
-      
+          input.form-control(type='text', name="id", value="#{team.id}", readonly)
+ 
       .form-group
         label.col-md-2.control-label Members
         .col-md-10
-          - each member in members
+          - each member in team.members
             .row.member
               .col-xs-3
-                img.pic(src="#{member.pic}")
+                img.pic(src="#{member.avatar}")
               .col-xs-9
-                h3.name= member.name
-                .id= member.github
-                .email= member.email
-        
+                h3.name= member.display_name
+                .username= member.username
+ 
       .form-group
         .col-md-offset-2.col-md-10
           button.btn.btn-success.btn-block(type='submit') Save Team
           .btn-group.btn-group-justified
-            a.btn.btn-warning(href="/quit/#{id}") Leave Team
+            a.btn.btn-warning(href="/team/#{team.id}/quit") Leave Team
             a.btn.btn-primary(href="/user") Edit User
-            a.btn.btn-danger(href="/logout") Logout
-  - else 
+            a.btn.btn-danger(href="/auth/logout") Logout
+  - else
 
     h3 Team Does Not Exist
