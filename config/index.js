@@ -13,5 +13,10 @@ module.exports = {
   GITLAB_URL          : process.env.GITLAB_URL
                           || 'https://gitlab.eecs.umich.edu',
   GITLAB_CALLBACK_URL : process.env.GITLAB_CALLBACK_URL
-                          || 'http://127.0.0.1:3000/auth/gitlab/callback'
+                          || 'http://127.0.0.1:3000/auth/gitlab/callback',
+
+  // Repoman parameters
+  REPOMAN_CLASSNAME : process.env.REPOMAN_CLASSNAME || 'EECS 494',
+  REPOMAN_SEMESTER  : process.env.REPOMAN_SEMESTER || 'Winter',
+  REPOMAN_YEAR      : process.env.REPOMAN_YEAR || 2016
 };

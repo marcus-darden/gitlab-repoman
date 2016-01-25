@@ -4,6 +4,7 @@ var AUTH_USERS = ['mmdarden'];
 
 var express = require('express');
 var models = require('../models');
+var config = require('../config');
 var router = express.Router();
   
 
@@ -24,9 +25,11 @@ function ensureAdmin(req, res, next) {
 
 
 router.get('/', function(req, res){
-  res.render('index', { classname: 'EECS 494',
-                        semester: 'Winter',
-                        year: 2016,
+  console.log('Root: ');
+  console.dir(req.user);
+  res.render('index', { classname: config.REPOMAN_CLASSNAME,
+                        semester: config.REPOMAN_SEMESTER,
+                        year: config.REPOMAN_YEAR,
                         user: req.user });
 });
 
