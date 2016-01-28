@@ -13,16 +13,19 @@ var models = require('../models');
 //   have a database of user records, the complete GitHub profile is serialized
 //   and deserialized.
 passport.serializeUser(function(user, done) {
-//  var u = { username: user.username,
-//            display_name: user.displayName,
-//            avatar: user.avatar,
-//            team_id: '' };
-//  console.dir(u);
-  done(null, user.username);
+  var u = { username: user.username,
+            private_token: user.private_token };
+  //console.log('serialize');
+  //console.dir(u);
+  done(null, u);
 });
 
-passport.deserializeUser(function(username, done) {
-  models.User.findByPrimary(username).then(function(user) {
+passport.deserializeUser(function(userinfo, done) {
+  models.User.findByPrimary(userinfo.username).then(function(user) {
+    user.private_token = userinfo.private_token;
+    //console.log('deserialize');
+    //console.dir(userinfo);
+    //console.dir(user);
     done(null, user);
   }).catch(function(err) {
     console.log(err);

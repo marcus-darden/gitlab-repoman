@@ -10,6 +10,8 @@ var strategy = new GitlabStrategy({
   gitlabURL: config.GITLAB_URL,
   callbackURL: config.GITLAB_CALLBACK_URL
 }, function (token, tokenSecret, profile, done) {
+  //console.log('profile');
+  //console.dir(profile);
   models.User.findOrCreate({
     where: { username: profile.username },
     defaults: {
@@ -17,7 +19,11 @@ var strategy = new GitlabStrategy({
       avatar: profile.avatar
     }
   }).spread(function (user, created) {
-    done(null, user.get({ plain: true }));
+    //console.log('In strategy: ');
+    var u = user.get({ plain: true });
+    u.private_token = profile.privateToken;
+    //console.dir(u);
+    done(null, u);
   }).catch(function (e) {
     done(e, null);
   });
