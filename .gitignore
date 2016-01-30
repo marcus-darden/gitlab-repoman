@@ -4,3 +4,4 @@ snippets/*
 *.swo
 npm-debug.log
 notes.txt
+secret.sh
