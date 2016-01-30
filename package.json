@@ -32,7 +32,7 @@
     "jade": "^1.11.0",
     "method-override": "^2.3.5",
     "passport": "^0.3.2",
-    "passport-gitlab": "^0.5.0",
+    "passport-gitlab": "github:marcus-darden/passport-gitlab#v0.5.1",
     "pg": "^4.4.3",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.15.1",
