@@ -33,5 +33,6 @@ app.use('/static', express.static(__dirname + '/public'));
 var routes = require('./routes');
 app.use('/', routes.root);
 app.use('/auth', routes.auth);
+app.use('/admin', routes.admin);
 
 app.listen(3000);

@@ -1,0 +1,35 @@
+extends layout
+
+block main
+    form.form-horizontal#admin
+      .form-group
+        label.col-md-2.control-label Instructor
+        .col-md-10
+          .row.member
+            .col-xs-3
+              img.pic(src="#{user.avatar}")
+            .col-xs-9
+              h3.name= user.display_name
+              .username= user.username
+
+      .form-group
+        label.col-md-2.control-label Groups
+        .col-md-10
+          - each group in groups
+            .row.group
+              .col-xs-9
+                .id= group.name
+              .col-xs-3
+                a.btn.btn-primary(href="/admin/create/#{group.id}") Create Repos
+      .form-group
+        .col-md-10
+          div.btn-group
+            button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown")
+              | Action
+              span.caret
+            ul.dropdown-menu(role="menu")
+              li
+                a(href="#") Action
+              li.divider
+              li
+                a(href="#") Another action
