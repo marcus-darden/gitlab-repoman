@@ -2,9 +2,10 @@
 
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    queryInterface('DROP COLUMN', 'size');
-    queryInterface('DROP COLUMN', 'creator');
-    queryInterface('ADD COLUMN', 'gitlab_project_id', Sequelize.INTEGER);
+    queryInterface.removeColumn('user', 'team_id');
+    queryInterface.removeColumn('team', 'size');
+    queryInterface.removeColumn('team', 'creator');
+    queryInterface.addColumn('team', 'gitlab_project_id', Sequelize.INTEGER);
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.

@@ -6,6 +6,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Assignment.hasMany(models.Team, { onDelete: 'restrict' });
+        Assignment.belongsTo(models.Course, { onDelete: 'cascade' });
       }
     }
   });

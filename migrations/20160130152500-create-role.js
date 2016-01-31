@@ -2,20 +2,18 @@
 module.exports = {
   up: function(queryInterface, Sequelize) {
     return queryInterface.createTable('Role', {
-      id: {
+      course_id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      user_username: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.CHAR(8)
+      },
       gitlab_role: {
         type: Sequelize.INTEGER
-      },
-      course_id: {
-        type: Sequelize.INTEGER
-      },
-      user_username: {
-        type: Sequelize.CHAR(8)
       },
       created_at: {
         allowNull: false,
