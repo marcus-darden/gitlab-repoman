@@ -10,10 +10,19 @@ module.exports = function(sequelize, DataTypes) {
     size: DataTypes.INTEGER,
     creator: DataTypes.CHAR(8)
   }, {
+    underscored: true,
     classMethods: {
       associate: function(models) {
-        Team.hasMany(models.User, { onDelete: 'restrict' });
-        Team.hasMany(models.Assignment, { onDelete: 'restrict' });
+        Team.belongsToMany(models.User, {
+          foreignKey: 'team_id',
+          otherKey: 'user_username',
+          through: 'user_team'
+        });
+        Team.belongsToMany(models.Assignment, {
+          foriegnKey: 'team_id',
+          otherKey: 'assignment_id',
+          through: 'team_assignment'
+        });
       }
     }
   });
