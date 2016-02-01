@@ -28,7 +28,7 @@
     "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "express-session": "^1.12.1",
-    "gitlab": "^1.5.0",
+    "gitlab": "github:marcus-darden/node-gitlab",
     "jade": "^1.11.0",
     "method-override": "^2.3.5",
     "passport": "^0.3.2",

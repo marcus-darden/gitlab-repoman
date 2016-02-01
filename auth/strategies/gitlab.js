@@ -17,7 +17,9 @@ var strategy = new GitlabStrategy({
       avatar: profile.avatar
     }
   }).spread(function (user, created) {
-    done(null, user.get({ plain: true }));
+    var u = user.get({ plain: true });
+    u.oauth_token = token;
+    done(null, u);
   }).catch(function (e) {
     done(e, null);
   });
