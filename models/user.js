@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('user', {
-    username: {
+    id: {
       type: DataTypes.CHAR(8),
       allowNull: false,
       primaryKey: true
@@ -12,15 +12,11 @@ module.exports = function(sequelize, DataTypes) {
     underscored: true,
     classMethods: {
       associate: function(models) {
-        User.belongsToMany(models.Team, {
-          foreignKey: 'user_username',
-          otherKey: 'team_id',
-          through: 'user_team'
-        });
+        User.belongsToMany(models.Team, {});
         User.belongsToMany(models.Course, {
           foriegnKey: 'user_username',
           otherKey: 'course_id',
-          through: models.Role // How is the race condition on Role resolved here?
+          through: models.Role
         });
       }
     }

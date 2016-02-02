@@ -7,12 +7,8 @@ module.exports = function(sequelize, DataTypes) {
     underscored: true,
     classMethods: {
       associate: function(models) {
-        Assignment.belongsToMany(models.Team, {
-          foreignKey: 'assignment_id',
-          otherKey: 'team_id',
-          through: 'team_assignment'
-        });
-        Assignment.belongsTo(models.Course, { onDelete: 'cascade' });
+        Assignment.belongsToMany(models.Team, {});
+        Assignment.belongsTo(models.Course, {});
       }
     }
   });
