@@ -8,6 +8,8 @@
     "artlogic": "npm install && node index.js",
     "test": "test-rm",
     "resetdb": "dropdb repoman_development && createdb repoman_development",
+    "adddbu": "psql -w -U mmdarden -d repoman_development -c \"CREATE USER repoman WITH PASSWORD 'repoman';\"",
+    "grantdbu": "psql -w -U mmdarden -d repoman_development -c \"GRANT ALL PRIVILEGES ON DATABASE repoman_development TO repoman;\"",
     "mig": "./node_modules/.bin/sequelize db:migrate --config config/database.js"
   },
   "repository": {
