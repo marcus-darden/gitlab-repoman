@@ -14,13 +14,13 @@ block main
               img.pic(src="#{user.avatar}")
             .col-xs-9
               h3.name= user.display_name
-              .username= user.username
+              .username= user.id
 
       .form-group
         label.col-md-3.control-label Uniqname
         .col-md-9
           .input-group
-            input.form-control(type='text', name="uniqname", placeholder='uniqname', value="#{user.username}", required, readonly)
+            input.form-control(type='text', name="uniqname", placeholder='uniqname', value="#{user.id}", required, readonly)
             span.input-group-btn
               a.btn(href="#") @umich.edu
 

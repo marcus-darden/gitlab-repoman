@@ -17,7 +17,7 @@ function ensureAuthenticated(req, res, next) {
 
 // Use on any resource that is admin only
 function ensureAdmin(req, res, next) {
-  if (AUTH_USERS.indexOf(req.user.uniqname) < 0)
+  if (AUTH_USERS.indexOf(req.user.id) < 0)
     res.status(403).send({status: 403, message: 'Admin access only', type:'internal'});
   else
     return next();
@@ -60,7 +60,7 @@ router.post('/key', ensureAuthenticated, function(req, res) {
   var user = req.user;
   var team = { id: req.body.key,
                name: '',
-               creator: user.username,
+               creator: user.id,
                size: 0 };
   console.log('/key  team:');
   console.dir(team);
@@ -78,7 +78,7 @@ router.get('/team/:id', ensureAuthenticated, function(req, res) {
     models.User.findAll({ where: { team_id: req.params.id }}).then(function(users) {
       var ii;
       for (ii = 0; ii < users.length; ++ii)
-        if (users[ii].username === user.username)
+        if (users[ii].username === user.id)
           team.members = users;
       res.render('team', { team: team });
     }); 
