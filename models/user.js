@@ -12,7 +12,9 @@ module.exports = function(sequelize, DataTypes) {
     underscored: true,
     classMethods: {
       associate: function(models) {
-        User.belongsToMany(models.Team, {});
+        User.belongsToMany(models.Team, {
+          through: 'user_team'
+        });
         User.belongsToMany(models.Course, {
           foriegnKey: 'user_username',
           otherKey: 'course_id',
