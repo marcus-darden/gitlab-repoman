@@ -9,7 +9,7 @@ module.exports = {
         onUpdate: 'cascade',
         primaryKey: true,
         references: { model: 'team' },
-        type: Sequelize.CHAR(11)
+        type: Sequelize.INTEGER
       },
       assignment_id: {
         allowNull: false,
@@ -43,7 +43,7 @@ module.exports = {
           onUpdate: 'cascade',
           primaryKey: true,
           references: { model: 'team' },
-          type: Sequelize.CHAR(11)
+          type: Sequelize.INTEGER
         },
         created_at: {
           allowNull: false,
