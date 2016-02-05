@@ -11,13 +11,11 @@ var strategy = new GitlabStrategy({
   callbackURL: config.GITLAB_CALLBACK_URL
 }, function (token, tokenSecret, profile, done) {
   models.User.findOrCreate({
-    where: { id: profile.username },
-    defaults: {
-      display_name: profile.displayName, 
-      avatar: profile.avatar
-    }
+    where: { id: profile.username }
   }).spread(function (user, created) {
     var u = user.get({ plain: true });
+    u.display_name = profile.displayName;
+    u.avatar = profile.avatar;
     u.oauth_token = token;
     done(null, u);
   }).catch(function (e) {
