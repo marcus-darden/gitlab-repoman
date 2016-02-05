@@ -13,6 +13,10 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING
       },
+      course_creator: {
+        defaultValue: false,
+        type: Sequelize.BOOLEAN
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

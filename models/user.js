@@ -2,12 +2,16 @@
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('user', {
     id: {
-      type: DataTypes.CHAR(8),
       allowNull: false,
       primaryKey: true
+      type: DataTypes.CHAR(8),
     },
     display_name: DataTypes.STRING,
     avatar: DataTypes.STRING,
+    course_creator: {
+      defaultValue: false,
+      DataTypes.BOOLEAN
+    }
   }, {
     underscored: true,
     classMethods: {
@@ -16,8 +20,6 @@ module.exports = function(sequelize, DataTypes) {
           through: 'user_team'
         });
         User.belongsToMany(models.Course, {
-          foriegnKey: 'user_username',
-          otherKey: 'course_id',
           through: models.Role
         });
       }
