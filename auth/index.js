@@ -13,20 +13,19 @@ var models = require('../models');
 //   have a database of user records, the complete GitHub profile is serialized
 //   and deserialized.
 passport.serializeUser(function(user, done) {
-//  var u = { username: user.username,
-//            display_name: user.displayName,
-//            avatar: user.avatar,
-//            team_id: '' };
-//  console.dir(u);
-  done(null, user.username);
+  var session_user = { id: user.id,
+                       oauth_token: user.oauth_token };
+  done(null, session_user);
 });
 
-passport.deserializeUser(function(username, done) {
-  models.User.findByPrimary(username).then(function(user) {
-    done(null, user);
+passport.deserializeUser(function(session_user, done) {
+  models.User.findById(session_user.id).then(function(user) {
+    var u = user.get({ plain: true });
+    u.oauth_token = session_user.oauth_token;
+    done(null, u);
   }).catch(function(err) {
     console.log(err);
-    done(new Error('User name \'' + username + '\' does not exist'));
+    done(new Error('User name \'' + id + '\' does not exist'));
   });
 });
 

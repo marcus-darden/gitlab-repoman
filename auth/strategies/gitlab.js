@@ -11,7 +11,7 @@ var strategy = new GitlabStrategy({
   callbackURL: config.GITLAB_CALLBACK_URL
 }, function (token, tokenSecret, profile, done) {
   models.User.findOrCreate({
-    where: { username: profile.username },
+    where: { id: profile.username },
     defaults: {
       display_name: profile.displayName, 
       avatar: profile.avatar
