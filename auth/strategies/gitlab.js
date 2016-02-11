@@ -13,11 +13,25 @@ var strategy = new GitlabStrategy({
   models.User.findOrCreate({
     where: { id: profile.username }
   }).spread(function (user, created) {
-    var u = user.get({ plain: true });
-    u.display_name = profile.displayName;
-    u.avatar = profile.avatar;
-    u.oauth_token = token;
-    done(null, u);
+    // Update user properties from GL
+    models.User.update({
+      avatar: profile.avatar,
+      display_name: profile.displayName,
+    }, {
+      where: {
+        id: profile.username
+      },
+      returning: true
+    }).spread(function(num_affected, updated_users) {
+      if (num_affected == 1)
+        var u = updated_users[0].get({ plain: true });
+      else
+        var u = user.get({ plain: true });
+      u.display_name = profile.displayName;
+      u.avatar = profile.avatar;
+      u.oauth_token = token;
+      done(null, u);
+    });
   }).catch(function (e) {
     done(e, null);
   });
