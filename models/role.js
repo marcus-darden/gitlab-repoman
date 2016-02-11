@@ -1,9 +1,9 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Role = sequelize.define('Role', {
-    gitlab_role: DataTypes.INTEGER,
+    user_id: DataTypes.CHAR(8),
     course_id: DataTypes.INTEGER,
-    user_id: DataTypes.CHAR(8)
+    gitlab_role: DataTypes.INTEGER
   }, {
     underscored: true,
     classMethods: {

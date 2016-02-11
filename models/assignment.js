@@ -2,6 +2,12 @@
 module.exports = function(sequelize, DataTypes) {
   var Assignment = sequelize.define('Assignment', {
     name: DataTypes.STRING,
+    abbr: DataTypes.CHAR(20),
+    description: DataTypes.STRING,
+    number: DataTypes.INTEGER,
+    teamsize: DataTypes.INTEGER,
+    create_teams: DataTypes.ENUM('manual', 'random', 'optin'),
+    active: DataTypes.BOOLEAN,
     gitlab_group_id: DataTypes.INTEGER
   }, {
     underscored: true,

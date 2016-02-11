@@ -3,14 +3,14 @@ module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('user', {
     id: {
       allowNull: false,
-      primaryKey: true
-      type: DataTypes.CHAR(8),
+      primaryKey: true,
+      type: DataTypes.CHAR(8)
     },
     display_name: DataTypes.STRING,
     avatar: DataTypes.STRING,
     course_creator: {
       defaultValue: false,
-      DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN
     }
   }, {
     underscored: true,
