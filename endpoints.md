@@ -31,3 +31,5 @@ Endpoint [Method]                                            | Description
                                                              | 
 /{uniqname}/{course label}/{assignment label}/teams/e        | Edit teams
 /{uniqname}/{course label}/{assignment label}/teams/e [POST] | Execute team edits
+                                                             | 
+/h/{hashid}                                                  | Shortcut to any page [user.id, course.id, assignment.id, team.id]
