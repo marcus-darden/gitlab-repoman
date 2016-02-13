@@ -26,5 +26,8 @@ Endpoint [Method]                                            | Description
                                                              | 
 /{uniqname}/{course label}/{assignment label}/e              | Edit assignment
 /{uniqname}/{course label}/{assignment label}/e [POST]       | Execute assignment edits
-/{uniqname}/{course label}/{assignment label}/e/teams        | Edit teams
-/{uniqname}/{course label}/{assignment label}/e/teams [POST] | Execute team edits
+                                                             | 
+/{uniqname}/{course label}/{assignment label}/teams          | Teams page
+                                                             | 
+/{uniqname}/{course label}/{assignment label}/teams/e        | Edit teams
+/{uniqname}/{course label}/{assignment label}/teams/e [POST] | Execute team edits
