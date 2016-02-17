@@ -28,7 +28,9 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.2",
+    "bootstrap": "^3.3.6",
     "express": "^4.13.3",
+    "express-bootstrap-service": "github:marcus-darden/express-bootstrap-service#16716f3",
     "express-session": "^1.12.1",
     "gitlab": "github:marcus-darden/node-gitlab",
     "jade": "^1.11.0",

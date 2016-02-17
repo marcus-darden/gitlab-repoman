@@ -2,7 +2,8 @@ doctype html
 html
   head
     title #{classname}
-    link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/bootstrap/css')
+    link(rel='stylesheet', href='/bootstrap/theme')
     link(rel='stylesheet', href='/static/css/style.css')
 
   body
@@ -12,5 +13,6 @@ html
           hr
           block main
 
-  script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js")
-  script(src="/static/js/main.js")
+  script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js')
+  script(src='/bootstrap/js')
+  script(src='/static/js/main.js')
