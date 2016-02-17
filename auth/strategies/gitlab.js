@@ -11,15 +11,15 @@ var strategy = new GitlabStrategy({
   callbackURL: config.GITLAB_CALLBACK_URL
 }, function (token, tokenSecret, profile, done) {
   models.User.findOrCreate({
-    where: { id: profile.username }
+    where: { username: profile.username }
   }).spread(function (user, created) {
     // Update user properties from GL
     models.User.update({
-      avatar: profile.avatar,
       display_name: profile.displayName,
+      avatar: profile.avatar,
     }, {
       where: {
-        id: profile.username
+        id: user.id
       },
       returning: true
     }).spread(function(num_affected, updated_users) {

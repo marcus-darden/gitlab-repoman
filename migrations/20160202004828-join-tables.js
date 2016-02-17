@@ -35,7 +35,7 @@ module.exports = {
           onUpdate: 'cascade',
           primaryKey: true,
           references: { model: 'user' },
-          type: Sequelize.CHAR(8)
+          type: Sequelize.INTEGER
         },
         team_id: {
           allowNull: false,
@@ -61,7 +61,7 @@ module.exports = {
             onUpdate: 'cascade',
             primaryKey: true,
             references: { model: 'user' },
-            type: Sequelize.CHAR(8)
+            type: Sequelize.INTEGER
           },
           course_id: {
             allowNull: false,

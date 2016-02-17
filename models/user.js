@@ -1,11 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('user', {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.CHAR(8)
-    },
+    username: DataTypes.CHAR(8),
     display_name: DataTypes.STRING,
     avatar: DataTypes.STRING,
     course_creator: {

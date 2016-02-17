@@ -25,7 +25,7 @@ passport.deserializeUser(function(session_user, done) {
     done(null, u);
   }).catch(function(err) {
     console.log(err);
-    done(new Error('User name \'' + id + '\' does not exist'));
+    done(new Error('User id ' + id + ' does not exist'));
   });
 });
 
