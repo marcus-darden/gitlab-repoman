@@ -33,6 +33,7 @@ router.get('/', function(req, res){
                         user: req.user });
 });
 
+/*
 router.get('/user', ensureAuthenticated, function(req, res) {
   res.render('user', { user: req.user });
 });
@@ -110,4 +111,5 @@ router.get('/team/:id/quit', ensureAuthenticated, function(req, res) {
   });
 });
 
+*/
 module.exports = router;

@@ -1,0 +1,11 @@
+extends layout
+
+block main
+
+  h2 Stub
+  - if (username)
+    p User: #{username}
+    - if (courseLabel)
+      p Course: #{courseLabel}
+      - if (assignmentLabel)
+        p Assignment: #{assignmentLabel}

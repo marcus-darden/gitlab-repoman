@@ -34,7 +34,6 @@ app.use('/static', express.static(__dirname + '/public'));
 
 // Routes
 var routes = require('./routes');
-app.use('/', routes.root);
-app.use('/auth', routes.auth);
+routes.init(app);
 
 app.listen(3000);
