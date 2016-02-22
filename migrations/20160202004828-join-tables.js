@@ -8,7 +8,7 @@ module.exports = {
         onDelete: 'restrict',
         onUpdate: 'cascade',
         primaryKey: true,
-        references: { model: 'team' },
+        references: { model: 'Team' },
         type: Sequelize.INTEGER
       },
       assignment_id: {
@@ -16,7 +16,7 @@ module.exports = {
         onDelete: 'restrict',
         onUpdate: 'cascade',
         primaryKey: true,
-        references: { model: 'assignment' },
+        references: { model: 'Assignment' },
         type: Sequelize.INTEGER
       },
       created_at: {
@@ -34,7 +34,7 @@ module.exports = {
           onDelete: 'restrict',
           onUpdate: 'cascade',
           primaryKey: true,
-          references: { model: 'user' },
+          references: { model: 'User' },
           type: Sequelize.INTEGER
         },
         team_id: {
@@ -42,7 +42,7 @@ module.exports = {
           onDelete: 'restrict',
           onUpdate: 'cascade',
           primaryKey: true,
-          references: { model: 'team' },
+          references: { model: 'Team' },
           type: Sequelize.INTEGER
         },
         created_at: {
@@ -60,7 +60,7 @@ module.exports = {
             onDelete: 'restrict',
             onUpdate: 'cascade',
             primaryKey: true,
-            references: { model: 'user' },
+            references: { model: 'User' },
             type: Sequelize.INTEGER
           },
           course_id: {
@@ -68,7 +68,7 @@ module.exports = {
             onDelete: 'restrict',
             onUpdate: 'cascade',
             primaryKey: true,
-            references: { model: 'course' },
+            references: { model: 'Course' },
             type: Sequelize.INTEGER
           },
           gitlab_role: {
@@ -94,7 +94,7 @@ module.exports = {
       Return a promise to correctly handle asynchronicity.
 
       Example:
-      return queryInterface.dropTable('users');
+      return queryInterface.dropTable('User');
     */
   }
 };
