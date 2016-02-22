@@ -2,6 +2,7 @@
 module.exports = function(sequelize, DataTypes) {
   var Course = sequelize.define('course', {
     number: DataTypes.STRING,
+    title: DataTypes.STRING,
     semester: DataTypes.STRING,
     active: DataTypes.BOOLEAN
   }, {
