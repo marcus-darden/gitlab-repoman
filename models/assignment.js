@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Assignment = sequelize.define('Assignment', {
+  var Assignment = sequelize.define('assignment', {
     name: DataTypes.STRING,
     abbr: DataTypes.CHAR(20),
     description: DataTypes.STRING,

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Role = sequelize.define('Role', {
+  var Role = sequelize.define('role', {
     user_id: DataTypes.INTEGER,
     course_id: DataTypes.INTEGER,
     gitlab_role: DataTypes.INTEGER
