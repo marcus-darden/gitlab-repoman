@@ -6,7 +6,6 @@ var passport = require('passport');
 var jade = require('jade');
 //var util = require('util');
 var session = require('express-session');
-var bootstrapService = require('express-bootstrap-service');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 //var partials = require('express-partials');
@@ -19,8 +18,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.set('view options', { layout: false });
 //app.use(partials());
-bootstrapService.init({ resourcesPath: __dirname + '/node_modules/bootstrap/dist/' });
-app.use(bootstrapService.serve);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
@@ -31,6 +28,7 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: fals
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/static', express.static(__dirname + '/public'));
+app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 
 // Routes
 var routes = require('./routes');
