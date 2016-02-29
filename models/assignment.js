@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Assignment.belongsToMany(models.Team, {
           onDelete: 'restrict',
-          through: 'team_assignment'
+          through: 'assignment_team'
         });
         Assignment.belongsTo(models.Course, {
           onDelete: 'restrict'

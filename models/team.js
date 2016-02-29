@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
         });
         Team.belongsToMany(models.Assignment, {
           onDelete: 'restrict',
-          through: 'team_assignment'
+          through: 'assignment_team'
         });
       }
     }
