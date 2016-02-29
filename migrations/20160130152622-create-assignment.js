@@ -39,6 +39,12 @@ module.exports = {
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      course_id: {
+        onDelete: 'restrict',
+        onUpdate: 'cascade',
+        references: { model: 'course' },
+        type: Sequelize.INTEGER
       }
     });
   },

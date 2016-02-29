@@ -4,13 +4,14 @@ module.exports = function(sequelize, DataTypes) {
     name: DataTypes.STRING,
     gitlab_project_id: DataTypes.INTEGER
   }, {
-    underscored: true,
     classMethods: {
       associate: function(models) {
         Team.belongsToMany(models.User, {
+          onDelete: 'restrict',
           through: 'user_team'
         });
         Team.belongsToMany(models.Assignment, {
+          onDelete: 'restrict',
           through: 'team_assignment'
         });
       }

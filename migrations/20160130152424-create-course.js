@@ -8,16 +8,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      number: {
-        type: Sequelize.STRING
+      label: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        unique: true
       },
       title: {
         type: Sequelize.STRING
       },
-      semester: {
-        type: Sequelize.STRING
-      },
       active: {
+        allowNull: false,
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       created_at: {

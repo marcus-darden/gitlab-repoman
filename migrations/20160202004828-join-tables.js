@@ -3,6 +3,14 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('team_assignment', {
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
       team_id: {
         allowNull: false,
         onDelete: 'restrict',
@@ -18,17 +26,17 @@ module.exports = {
         primaryKey: true,
         references: { model: 'assignment' },
         type: Sequelize.INTEGER
-      },
-      created_at: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     }).then(function() {
       return queryInterface.createTable('user_team', {
+        created_at: {
+          allowNull: false,
+          type: Sequelize.DATE
+        },
+        updated_at: {
+          allowNull: false,
+          type: Sequelize.DATE
+        },
         user_id: {
           allowNull: false,
           onDelete: 'restrict',
@@ -44,14 +52,6 @@ module.exports = {
           primaryKey: true,
           references: { model: 'team' },
           type: Sequelize.INTEGER
-        },
-        created_at: {
-          allowNull: false,
-          type: Sequelize.DATE
-        },
-        updated_at: {
-          allowNull: false,
-          type: Sequelize.DATE
         }
       }).then(function() {
         return queryInterface.createTable('role', {
