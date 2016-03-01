@@ -1,12 +1,20 @@
-extends layout
+extends layout2
 
 block main
-  .center
-    h3 Welcome to #{classname} #{semester} #{year}.
-    h4 This semester we'll be using Gitlab for team collaboration and project submission. 
-    p With this tool, you can create or join a team and we'll be able to automatically create repositories for your group!
-    p After you've made a team you can share the unique key we give you with the other members of your group so they can join.
-        
-    .middle
-      a.btn.btn-success.btn-lg.btn-block(href="/auth/gitlab") Ok I Read All That, Login with Gitlab!
-    
+  - if (!user)
+    .center
+      h3 Welcome to #{classname} #{semester} #{year}.
+      h4 This semester we'll be using Gitlab for team collaboration and project submission. 
+      p With this tool, you can create or join a team and we'll be able to automatically create repositories for your group!
+      p After you've made a team you can share the unique key we give you with the other members of your group so they can join.
+          
+      .middle
+        a.btn.btn-success.btn-lg.btn-block(href="/auth/gitlab") Ok I Read All That, Login with Gitlab!
+  - else
+    h2 Courses
+    a.btn.btn-success(href="/#{user.username}/course")
+      span.glyphicon.glyphicon-plus
+      | New Course
+
+    h3 Current
+    h3 Archived

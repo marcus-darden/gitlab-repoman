@@ -9,14 +9,14 @@ var router = express.Router();
   
 
 // Use on any resource that needs to be protected
-function ensureAuthenticated(req, res, next) {
+function isAuthenticated(req, res, next) {
   if (req.isAuthenticated())
     return next();
   res.redirect('/');
 }
 
 // Use on any resource that is admin only
-function ensureAdmin(req, res, next) {
+function isAdmin(req, res, next) {
   if (AUTH_USERS.indexOf(req.user.id) < 0)
     res.status(403).send({status: 403, message: 'Admin access only', type:'internal'});
   else
@@ -34,11 +34,11 @@ router.get('/', function(req, res){
 });
 
 /*
-router.get('/user', ensureAuthenticated, function(req, res) {
+router.get('/user', isAuthenticated, function(req, res) {
   res.render('user', { user: req.user });
 });
 
-router.post('/user', ensureAuthenticated, function(req, res) {
+router.post('/user', isAuthenticated, function(req, res) {
   var user = req.user;
   var team_id = req.body.team_id;
 
@@ -57,7 +57,7 @@ router.post('/user', ensureAuthenticated, function(req, res) {
   });
 });
 
-router.post('/key', ensureAuthenticated, function(req, res) {
+router.post('/key', isAuthenticated, function(req, res) {
   var user = req.user;
   var team = { id: req.body.key,
                name: '',
@@ -70,7 +70,7 @@ router.post('/key', ensureAuthenticated, function(req, res) {
   });
 });
 
-router.get('/team/:id', ensureAuthenticated, function(req, res) {
+router.get('/team/:id', isAuthenticated, function(req, res) {
   var user = req.user;
   models.Team.findById(req.params.id).then(function(team) {
     if (!team)
@@ -86,7 +86,7 @@ router.get('/team/:id', ensureAuthenticated, function(req, res) {
   });
 });
 
-router.post('/team/:id', ensureAuthenticated, function(req, res) {
+router.post('/team/:id', isAuthenticated, function(req, res) {
   models.Team.findById(req.params.id).then(function(team) {
     team.update({ name: req.body.name }).then(function(team) {
       res.send({ success: 'ok' });
@@ -94,7 +94,7 @@ router.post('/team/:id', ensureAuthenticated, function(req, res) {
   });
 });
 
-router.get('/team/:id/quit', ensureAuthenticated, function(req, res) {
+router.get('/team/:id/quit', isAuthenticated, function(req, res) {
   var user = req.user;
   var user_team_id = user.team_id;
   user.update({ team_id: null }).then(function(user) {

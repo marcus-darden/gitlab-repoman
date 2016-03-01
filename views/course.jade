@@ -1,0 +1,13 @@
+extends layout2
+
+block main
+
+  - if (course.title)
+    h2= course.title
+  - else
+    h2= course.label
+  h3 Assignments
+  a.btn.btn-success(href="/#{params.username}/#{course.label}/assignment")
+    span.glyphicon.glyphicon-plus
+    | New Assignment
+

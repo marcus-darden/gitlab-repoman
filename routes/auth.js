@@ -26,10 +26,10 @@ router.get('/:strategy',
 
 router.get('/:strategy/callback', 
   function(req, res, next) {
-    passport.authenticate(req.params.strategy, { failureRedirect: '/login' })(req, res, next);
+    passport.authenticate(req.params.strategy, { failureRedirect: '/' })(req, res, next);
   },
-  function(req, res) {
-    res.redirect('/user');
+  function(req, res, next) {
+    res.redirect('/' + req.user.username);
   }
 );
 

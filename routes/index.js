@@ -27,8 +27,12 @@ function isStaff(req, res, next) {
 var routesModule = {
   init: function(app) {
     app.use('/', require('./root'));
-    //app.use('/auth', require('./auth'));
+    app.use('/auth', require('./auth'));
     
+    app.get('/h/:hashid', isAuthenticated, function(req, res, next) {
+      res.send('Hash ID: ' + req.params.hashid);
+    });
+
     app.get('/:username', isAuthenticated, user.homepage);
     app.post('/:username', isOwner, user.update);
     app.get('/:username/edit', isOwner, user.edit);
@@ -52,10 +56,6 @@ var routesModule = {
     app.get('/:username/:courseLabel/:assignmentLabel/team', isAuthenticated, team.homepage);
     app.post('/:username/:courseLabel/:assignmentLabel/team', isStaff, team.update);
     app.get('/:username/:courseLabel/:assignmentLabel/team/edit', isAuthenticated, team.edit);
-
-    app.get('/h/:hashid', isAuthenticated, function(req, res, next) {
-      res.send('Hash ID: ' + req.params.hashid);
-    });
   }
 };
 

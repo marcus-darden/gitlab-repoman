@@ -1,0 +1,35 @@
+extends layout2
+
+block main
+  h2 Courses
+  h3 New Course
+  form#course-new(name='course-new', method='post', action='/#{username}/course')
+    .form-group
+      label.col-md-2.control-label Department
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='department', placeholder='e.g. EECS', maxlength=8)
+    .form-group
+      label.col-md-2.control-label Course Number
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='number', placeholder='e.g. 281', maxlength=4)
+    .form-group
+      label.col-md-2.control-label Section Number
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='section', placeholder='e.g. 001, 002, etc. or blank to combine/ignore', maxlength=3)
+    .form-group
+      label.col-md-2.control-label Course Title
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='title', placeholder='e.g. Data Structures & Algorithms')
+    .form-group
+      label.col-md-2.control-label Semester
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='semester', placeholder='Fall, Winter, Spring, Summer, Spring/Summer', maxlength=13)
+    .form-group
+      label.col-md-2.control-label Year
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='year', placeholder='e.g. 2016', maxlength=4)
+    .form-group
+      .col-md-2
+        button.btn.btn-success(type='submit') Create Course
+      .col-md-8.col-md-offset-2
+        a.btn.btn-default(href='/#{username}') Cancel

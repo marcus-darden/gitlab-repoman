@@ -1,9 +1,12 @@
 var models = require('../models');
+var courseHelper = require('../helpers/course');
 
 var courseModule = {
   homepage: function(req, res, next) {
     // app.get('/:username/:courseLabel', isAuthenticated, course.homepage);
-    res.render('stub', req.params);
+    courseHelper.getByLabel(req.params.courseLabel).then(function(_course) {
+      res.render('course', { course: _course, params: req.params });
+    });
   },
 
   update: function(req, res, next) {
