@@ -43,7 +43,7 @@ var course = {
     type: Sequelize.STRING,
     unique: true
   },
-  title: {
+  name: {
     type: Sequelize.STRING
   },
   active: {
