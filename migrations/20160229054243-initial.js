@@ -80,13 +80,17 @@ var assignment = {
   number: {
     type: Sequelize.INTEGER
   },
-  teamsize: {
+  min_team_size: {
+    type: Sequelize.INTEGER
+  },
+  max_team_size: {
     type: Sequelize.INTEGER
   },
   create_teams: {
     type: Sequelize.ENUM('manual', 'random', 'optin')
   },
   active: {
+    defaultValue: false,
     type: Sequelize.BOOLEAN
   },
   gitlab_group_id: {

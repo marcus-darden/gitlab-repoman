@@ -5,9 +5,13 @@ module.exports = function(sequelize, DataTypes) {
     abbr: DataTypes.CHAR(20),
     description: DataTypes.STRING,
     number: DataTypes.INTEGER,
-    teamsize: DataTypes.INTEGER,
+    min_team_size: DataTypes.INTEGER,
+    max_team_size: DataTypes.INTEGER,
     create_teams: DataTypes.ENUM('manual', 'random', 'optin'),
-    active: DataTypes.BOOLEAN,
+    active: {
+      defaultValue: false,
+      type: DataTypes.BOOLEAN
+    },
     gitlab_group_id: DataTypes.INTEGER
   }, {
     classMethods: {
