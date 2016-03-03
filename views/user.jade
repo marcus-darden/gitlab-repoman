@@ -11,7 +11,7 @@ block main
     ul
       each course in taught
         li 
-          a(href='/' + user.username + '/' + course.label)= course.title ? course.title : course.label
+          a(href='/' + user.username + '/' + course.label)= course.name ? course.name : course.label
     p #{taught.length} courses taught
     h3 Taken
     p #{taken.length} courses taken

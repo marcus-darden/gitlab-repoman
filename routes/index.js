@@ -49,13 +49,13 @@ var routesModule = {
 
     app.get ('/:username/:courseLabel/assignment', isStaff, assignment.new);
     app.post('/:username/:courseLabel/assignment', isStaff, assignment.create);
-    app.get ('/:username/:courseLabel/:assignmentLabel', isAuthenticated, assignment.homepage);
-    app.post('/:username/:courseLabel/:assignmentLabel', isStaff, assignment.update);
-    app.get ('/:username/:courseLabel/:assignmentLabel/edit', isStaff, assignment.edit);
+    app.get ('/:username/:courseLabel/:assignmentAbbr', isAuthenticated, assignment.homepage);
+    app.post('/:username/:courseLabel/:assignmentAbbr', isStaff, assignment.update);
+    app.get ('/:username/:courseLabel/:assignmentAbbr/edit', isStaff, assignment.edit);
 
-    app.get('/:username/:courseLabel/:assignmentLabel/team', isAuthenticated, team.homepage);
-    app.post('/:username/:courseLabel/:assignmentLabel/team', isStaff, team.update);
-    app.get('/:username/:courseLabel/:assignmentLabel/team/edit', isAuthenticated, team.edit);
+    app.get('/:username/:courseLabel/:assignmentAbbr/team', isAuthenticated, team.homepage);
+    app.post('/:username/:courseLabel/:assignmentAbbr/team', isStaff, team.update);
+    app.get('/:username/:courseLabel/:assignmentAbbr/team/edit', isAuthenticated, team.edit);
   }
 };
 

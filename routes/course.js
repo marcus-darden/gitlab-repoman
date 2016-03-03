@@ -4,7 +4,9 @@ var helpers = require('../helpers');
 var courseModule = {
   new: function(req, res, next) {
     // app.get('/:username/course', isOwner, course.new);
-    res.render('course_new', req.params);
+    res.render('course_new', {
+      params: req.params
+    });
   },
 
   create: function(req, res, next) {
@@ -34,7 +36,7 @@ var courseModule = {
     semester += req.body.year.toLowerCase().replace(' ', '');
     var label = number + '-' + semester;
 
-    helpers.course.create(req.user.id, label, req.body.title).then(function(_course) {
+    helpers.course.create(req.user.id, label, req.body.name).then(function(_course) {
       res.redirect(303, '/' + req.params.username + '/' + _course.label);
     });
   },
@@ -42,7 +44,13 @@ var courseModule = {
   homepage: function(req, res, next) {
     // app.get('/:username/:courseLabel', isAuthenticated, course.homepage);
     helpers.course.getByLabel(req.params.courseLabel).then(function(_course) {
-      res.render('course', { course: _course, params: req.params });
+      _course.getAssignments().then(function(_assignments) {
+        res.render('course', {
+          course: _course,
+          assignments: _assignments,
+          params: req.params
+        });
+      });
     });
   },
 

@@ -1,0 +1,31 @@
+extends layout2
+
+block main
+  h2 Assignments
+  h3 New Assignment
+  form#assignment-new(name='assignment-new', method='post', action='/#{params.username}/#{params.courseLabel}/assignment')
+    .form-group
+      label.col-md-2.control-label Name
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='name', placeholder='e.g. Project 1, Programming Assignment 3')
+    .form-group
+      label.col-md-2.control-label Abbreviation
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='abbr', placeholder='e.g. W15P3, project-1, pa3', maxlength=10)
+    .form-group
+      label.col-md-2.control-label Minimum Team Size
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='minTeamSize', placeholder='e.g. 1')
+    .form-group
+      label.col-md-2.control-label Maximum Team Size
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='maxTeamSize', placeholder='e.g. 5 or leave blank to set max = min')
+    .form-group
+      label.col-md-2.control-label Team Creation Method
+      .col-md-8.col-md-offset-2
+        input.form-control(type='text', name='createTeams', placeholder='choose: manual, random, or optin')
+    .form-group
+      .col-md-2
+        button.btn.btn-success(type='submit') Create Assignment
+      .col-md-8.col-md-offset-2
+        a.btn.btn-default(href='/#{params.username}/#{params.courseLabel}') Cancel

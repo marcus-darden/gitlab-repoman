@@ -1,0 +1,12 @@
+extends layout2
+
+block main
+
+  h2= assignment.name
+  h3 Teams
+
+  ul
+    each team in teams
+      li
+        team.name
+  p #{teams.length} teams

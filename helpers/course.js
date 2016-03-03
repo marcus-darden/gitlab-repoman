@@ -1,7 +1,7 @@
 var models = require('../models');
 
 module.exports = {
-  create: function(user_id, course_label, course_title) {
+  create: function(user_id, course_label, course_name) {
     var user, course;
 
     return models.User.findById(user_id).then(function(_user) {
@@ -9,7 +9,7 @@ module.exports = {
 
       return models.Course.create({
         label: course_label,
-        title: course_title
+        name: course_name
       });
     }).then(function(_course) {
       course = _course;
