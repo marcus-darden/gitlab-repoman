@@ -42,5 +42,19 @@ module.exports = {
       }]
     });
     return models.sequelize.Promise.all([taught, taken]);
+  },
+
+  isStaff: function(user_username, course_label) {
+    return models.Course.count({
+      where: { label: course_label },
+      include: [{
+        model: models.User,
+        where: { username: user_username },
+        through: { where: { gitlab_role: { $gte: 40 } } }
+      }]
+    }).then(function(_count) {
+      console.log('COUNT: ', _count);
+      return _count !== 0;
+    });
   }
 };

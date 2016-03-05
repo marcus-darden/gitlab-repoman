@@ -1,27 +1,36 @@
 'use strict';
 
+var helpers = require('../helpers');
+
+// route handlers
 var user = require('./user');
 var course = require('./course');
 var assignment = require('./assignment');
 var team = require('./team');
 
 function isAuthenticated(req, res, next) {
-  //if (req.isAuthenticated())
+  if (req.isAuthenticated())
     return next();
-  res.redirect('/');
+  res.redirect(303, '/');
 }
 
 function isOwner(req, res, next) {
-  //if (req.isAuthenticated && req.user.username === req.locals.username)
+  if (req.isAuthenticated && req.user.username === req.params.username)
     return next();
-  res.redirect('/');
+  res.redirect(303, '/');
 }
 
 function isStaff(req, res, next) {
-  //console.log('isStaff incomplete in ' + module.filename);
-  //if (req.isAuthenticated)
-    return next();
-  res.redirect('/');
+  if (req.isAuthenticated()) {
+    helpers.course.isStaff(req.params.username, req.params.courseLabel).then(function(_isStaff) {
+      if (_isStaff)
+        return next();
+      else
+        res.redirect(303, '/' + req.params.username);
+    });
+  }
+  else
+    res.redirect(303, '/' + req.params.username);
 }
 
 var routesModule = {
