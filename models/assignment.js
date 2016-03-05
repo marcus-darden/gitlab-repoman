@@ -2,7 +2,7 @@
 module.exports = function(sequelize, DataTypes) {
   var Assignment = sequelize.define('assignment', {
     name: DataTypes.STRING,
-    abbr: DataTypes.CHAR(20),
+    abbr: DataTypes.STRING,
     description: DataTypes.STRING,
     number: DataTypes.INTEGER,
     min_team_size: DataTypes.INTEGER,

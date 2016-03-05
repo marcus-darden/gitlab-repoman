@@ -3,6 +3,8 @@ extends layout2
 block main
 
   h2= assignment.name
+  p
+    a(href='/' + params.username + '/' + params.courseLabel + '/' + assignment.abbr + '/edit') edit assignment
   h3 Teams
 
   ul

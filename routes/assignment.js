@@ -4,7 +4,7 @@ var helpers = require('../helpers');
 var assignmentModule = {
   new: function(req, res, next) {
     // app.get('/:username/:courseLabel/assignment', isStaff, assignment.new);
-    res.render('assignment_new', {
+    res.render('assignment_edit', {
       params: req.params
     });
   },
@@ -29,7 +29,7 @@ var assignmentModule = {
     createTeams = req.body.createTeams.toLowerCase().charAt(0);
     if (createTeams === 'r')
       createTeams = 'random';
-    else if (createTeams === 'optin')
+    else if (createTeams === 'o')
       createTeams = 'optin';
     else
       createTeams = 'manual';
@@ -41,7 +41,6 @@ var assignmentModule = {
 
   homepage: function(req, res, next) {
     // app.get('/:username/:courseLabel/:assignmentAbbr', isAuthenticated, assignment.homepage);
-    //res.render('stub', req.params);
     var assignment;
     helpers.assignment.get(req.params.courseLabel, req.params.assignmentAbbr).then(function(_assignment) {
       assignment = _assignment;
@@ -63,7 +62,12 @@ var assignmentModule = {
 
   edit: function(req, res, next) {
     // app.get('/:username/:courseLabel/:assignmentAbbr/edit', isStaff, assignment.edit);
-    res.render('stub', req.params);
+    helpers.assignment.get(req.params.courseLabel, req.params.assignmentAbbr).then(function(_assignment) {
+      res.render('assignment_edit', {
+        assignment: _assignment,
+        params: req.params
+      });
+    });
   }
 };
 

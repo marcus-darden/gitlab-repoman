@@ -4,7 +4,7 @@ var helpers = require('../helpers');
 var courseModule = {
   new: function(req, res, next) {
     // app.get('/:username/course', isOwner, course.new);
-    res.render('course_new', {
+    res.render('course_edit', {
       params: req.params
     });
   },
@@ -61,7 +61,34 @@ var courseModule = {
 
   edit: function(req, res, next) {
     // app.get('/:username/:courseLabel/edit', isStaff, course.edit);
-    res.render('stub', req.params);
+    var tokens = req.params.courseLabel.split('-');
+    var label = {
+      department: tokens[0].toUpperCase(),
+      number: tokens[1],
+      section: '',
+      semester: '',
+      year: ''
+    };
+    if (tokens.length === 4) {
+      label.semester = tokens[2];
+      label.year = tokens[3];
+    }
+    else if (tokens.length === 5) {
+      label.section = tokens[2];
+      label.semester = tokens[3];
+      label.year = tokens[4];
+    }
+    if (label.semester)
+      label.semester = label.semester.charAt(0).toUpperCase()
+                       + label.semester.slice(1);
+
+    helpers.course.getByLabel(req.params.courseLabel).then(function(_course) {
+      res.render('course_edit', {
+        label: label,
+        courseName: _course.name,
+        params: req.params
+      });
+    });
   },
 
   staffEdit: function(req, res, next) {
