@@ -72,7 +72,7 @@ var assignment = {
     type: Sequelize.STRING
   },
   abbr: {
-    type: Sequelize.CHAR(20)
+    type: Sequelize.STRING
   },
   description: {
     type: Sequelize.STRING
