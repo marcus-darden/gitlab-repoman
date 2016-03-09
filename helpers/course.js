@@ -1,6 +1,20 @@
 var models = require('../models');
 
 module.exports = {
+  addUsers: function(course_label, users, gitlab_role) {
+    var course;
+
+    return models.Course.findOne({
+      where: { label: course_label }
+    }).then(function(_course) {
+      course = _course;
+
+      return course.addUsers(users, {
+        where: { gitlab_role: gitlab_role }
+      });
+    });
+  },
+
   create: function(user_id, course_label, course_name) {
     var user, course;
 
@@ -20,7 +34,7 @@ module.exports = {
     });
   },
 
-  getByLabel: function(course_label) {
+  get: function(course_label) {
     return models.Course.findOne({
       where: { label: course_label }
     });

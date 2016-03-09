@@ -43,13 +43,28 @@ var courseModule = {
 
   homepage: function(req, res, next) {
     // app.get('/:username/:courseLabel', isAuthenticated, course.homepage);
-    helpers.course.getByLabel(req.params.courseLabel).then(function(_course) {
-      _course.getAssignments().then(function(_assignments) {
-        res.render('course', {
-          course: _course,
-          assignments: _assignments,
-          params: req.params
-        });
+    var course, staff, roster, assignments;
+
+    helpers.course.get(req.params.courseLabel).then(function(_course) {
+      course = _course;
+
+      staff = helpers.user.getStaff(course.id);
+      roster = helpers.user.getRoster(course.id);
+      assignments = course.getAssignments();
+
+      return models.Sequelize.Promise.all([
+        course,
+        staff,
+        roster,
+        assignments
+      ]);
+    }).spread(function(_course, _staff, _roster, _assignments) {
+      res.render('course', {
+        course: _course,
+        staff: _staff,
+        roster: _roster,
+        assignments: _assignments,
+        params: req.params
       });
     });
   },
@@ -82,7 +97,7 @@ var courseModule = {
       label.semester = label.semester.charAt(0).toUpperCase()
                        + label.semester.slice(1);
 
-    helpers.course.getByLabel(req.params.courseLabel).then(function(_course) {
+    helpers.course.get(req.params.courseLabel).then(function(_course) {
       res.render('course_edit', {
         label: label,
         courseName: _course.name,
@@ -93,7 +108,14 @@ var courseModule = {
 
   staffEdit: function(req, res, next) {
     // app.get('/:username/:courseLabel/staff/edit', isStaff, course.staffEdit);
-    res.render('stub', req.params);
+    var uniqnames = req.body.members.toLowerCase();
+    var users, course;
+    uniqnames = uniqnames.split(/[.,;\s]+/);
+    helpers.user.getUsers(uniqnames).then(function(_users) {
+      helpers.course.addUsers(req.params.courseLabel, _users, 40).then(function() {
+        res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
+      });
+    });
   },
 
   staffUpdate: function(req, res, next) {

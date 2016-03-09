@@ -4,73 +4,74 @@ block main
   h2 Courses
   h3 #{label ? 'Edit' : 'Create'} Course
   if label
-    form#course-edit(name='course-edit', method='post', action='/#{params.username}/#{params.courseLabel}/edit')
+    - var formAction = '/' + params.username + '/' + params.courseLabel + '/edit'
   else
-    form#course-edit(name='course-edit', method='post', action='/#{params.username}/course')
+    - var formAction = '/' + params.username + '/course'
 
-  .form-group
-    label.col-md-2.control-label Department
-    .col-md-8.col-md-offset-2
-      input.form-control(
-        type='text',
-        name='department',
-        placeholder='e.g. EECS', maxlength=8,
-        value=(label ? label.department : '')
-      )
-  .form-group
-    label.col-md-2.control-label Course Number
-    .col-md-8.col-md-offset-2
-      input.form-control(
-        type='text',
-        name='number',
-        placeholder='e.g. 281',
-        maxlength=4,
-        value=(label ? label.number : '')
-      )
-  .form-group
-    label.col-md-2.control-label Section Number
-    .col-md-8.col-md-offset-2
-      input.form-control(
-        type='text',
-        name='section',
-        placeholder='e.g. 001, 002, etc. or blank to combine/ignore',
-        maxlength=3,
-        value=(label ? label.section : '')
-      )
-  .form-group
-    label.col-md-2.control-label Course Name
-    .col-md-8.col-md-offset-2
-      input.form-control(
-        type='text',
-        name='name',
-        placeholder='e.g. Data Structures & Algorithms',
-        value=(courseName ? courseName : '')
-      )
-  .form-group
-    label.col-md-2.control-label Semester
-    .col-md-8.col-md-offset-2
-      input.form-control(
-        type='text',
-        name='semester',
-        placeholder='Fall, Winter, Spring, Summer, Spring/Summer',
-        maxlength=13,
-        value=(label ? label.semester : '')
-      )
-  .form-group
-    label.col-md-2.control-label Year
-    .col-md-8.col-md-offset-2
-      input.form-control(
-        type='text',
-        name='year',
-        placeholder='e.g. 2016',
-        maxlength=4,
-        value=(label ? label.year : '')
-      )
-  .form-group
-    .col-md-2
-      button.btn.btn-success(type='submit') #{label ? 'Edit' : 'Create'} Course
-    .col-md-8.col-md-offset-2
-      if label
-        a.btn.btn-default(href='/#{params.username}/#{params.courseLabel}') Cancel
-      else
-        a.btn.btn-default(href='/#{params.username}') Cancel
+  form#course-edit(name='course-edit', method='post', action=formAction)
+    .form-group
+      label.col-md-2.control-label Department
+      .col-md-8.col-md-offset-2
+        input.form-control(
+          type='text',
+          name='department',
+          placeholder='e.g. EECS', maxlength=8,
+          value=(label ? label.department : '')
+        )
+    .form-group
+      label.col-md-2.control-label Course Number
+      .col-md-8.col-md-offset-2
+        input.form-control(
+          type='text',
+          name='number',
+          placeholder='e.g. 281',
+          maxlength=4,
+          value=(label ? label.number : '')
+        )
+    .form-group
+      label.col-md-2.control-label Section Number
+      .col-md-8.col-md-offset-2
+        input.form-control(
+          type='text',
+          name='section',
+          placeholder='e.g. 001, 002, etc. or blank to combine/ignore',
+          maxlength=3,
+          value=(label ? label.section : '')
+        )
+    .form-group
+      label.col-md-2.control-label Course Name
+      .col-md-8.col-md-offset-2
+        input.form-control(
+          type='text',
+          name='name',
+          placeholder='e.g. Data Structures & Algorithms',
+          value=(courseName ? courseName : '')
+        )
+    .form-group
+      label.col-md-2.control-label Semester
+      .col-md-8.col-md-offset-2
+        input.form-control(
+          type='text',
+          name='semester',
+          placeholder='Fall, Winter, Spring, Summer, Spring/Summer',
+          maxlength=13,
+          value=(label ? label.semester : '')
+        )
+    .form-group
+      label.col-md-2.control-label Year
+      .col-md-8.col-md-offset-2
+        input.form-control(
+          type='text',
+          name='year',
+          placeholder='e.g. 2016',
+          maxlength=4,
+          value=(label ? label.year : '')
+        )
+    .form-group
+      .col-md-2
+        button.btn.btn-success(type='submit') #{label ? 'Edit' : 'Create'} Course
+      .col-md-8.col-md-offset-2
+        if label
+          a.btn.btn-default(href='/#{params.username}/#{params.courseLabel}') Cancel
+        else
+          a.btn.btn-default(href='/#{params.username}') Cancel

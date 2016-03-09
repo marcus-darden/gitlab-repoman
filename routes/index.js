@@ -15,6 +15,7 @@ function isAuthenticated(req, res, next) {
 }
 
 function isOwner(req, res, next) {
+  console.log('isOwner');
   if (req.isAuthenticated && req.user.username === req.params.username)
     return next();
   res.redirect(303, '/');
