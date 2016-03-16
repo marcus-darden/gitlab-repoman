@@ -7,9 +7,10 @@ block main
   h2= assignment.name + " (" + assignment.abbr + ")"
   p Teams: #{assignment.min_team_size}#{assignment.max_team_size === assignment.min_team_size ? '' : "-" + assignment.max_team_size} members (#{assignment.create_teams === "manual" ? "Instructor Created" : (assignment.create_teams === "random" ? "Randomly Generated" : "Student Formed")})
   p
-    a(href='/' + params.username + '/' + params.courseLabel + '/' + assignment.abbr + '/edit') edit assignment
-  p
-   | delete assignment
+    a.btn.btn-default(href='/' + params.username + '/' + params.courseLabel + '/' + assignment.abbr + '/edit') edit assignment
+  form#delete-assignment(name='delete-assignment', method='post', action='/#{params.username}/#{params.courseLabel}/#{assignment.abbr}/delete')
+    .form-group
+      button.btn.btn-danger(type='submit') delete assignment
 
   h3 Teams(#{teams.length})
   ul

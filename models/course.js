@@ -16,10 +16,10 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Course.hasMany(models.Assignment, {
-          onDelete: 'restrict'
+          onDelete: 'cascade'
         });
         Course.belongsToMany(models.User, {
-          onDelete: 'restrict',
+          onDelete: 'cascade',
           through: models.Role
         });
       }

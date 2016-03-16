@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
           through: 'assignment_team'
         });
         Assignment.belongsTo(models.Course, {
-          onDelete: 'restrict'
+          onDelete: 'cascade'
         });
       }
     }

@@ -19,6 +19,13 @@ var assignmentModule = {
     });
   },
 
+  delete: function(req, res, next) {
+    // app.post('/:username/:courseLabel/:assignmentAbbr/delete', isStaff, assignment.delete);
+    helpers.assignment.delete(req.params.courseLabel, req.params.assignmentAbbr).then(function() {
+      res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
+    });
+  },
+
   homepage: function(req, res, next) {
     // app.get('/:username/:courseLabel/:assignmentAbbr', isAuthenticated, assignment.homepage);
     var assignment;

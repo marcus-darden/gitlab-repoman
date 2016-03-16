@@ -105,8 +105,7 @@ var assignment = {
     type: Sequelize.DATE
   },
   course_id: {
-    onDelete: 'restrict',
-    onUpdate: 'cascade',
+    onDelete: 'cascade',
     references: { model: 'course' },
     type: Sequelize.INTEGER
   }
@@ -150,7 +149,7 @@ var role = {
   },
   user_id: {
     allowNull: false,
-    onDelete: 'restrict',
+    onDelete: 'cascade',
     onUpdate: 'cascade',
     primaryKey: true,
     references: { model: 'user' },
@@ -158,7 +157,7 @@ var role = {
   },
   course_id: {
     allowNull: false,
-    onDelete: 'restrict',
+    onDelete: 'cascade',
     onUpdate: 'cascade',
     primaryKey: true,
     references: { model: 'course' },
@@ -177,7 +176,7 @@ var user_team = {
   },
   user_id: {
     allowNull: false,
-    onDelete: 'restrict',
+    onDelete: 'cascade',
     onUpdate: 'cascade',
     primaryKey: true,
     references: { model: 'user' },
@@ -185,7 +184,7 @@ var user_team = {
   },
   team_id: {
     allowNull: false,
-    onDelete: 'restrict',
+    onDelete: 'cascade',
     onUpdate: 'cascade',
     primaryKey: true,
     references: { model: 'team' },
@@ -204,7 +203,7 @@ var assignment_team = {
   },
   assignment_id: {
     allowNull: false,
-    onDelete: 'restrict',
+    onDelete: 'cascade',
     onUpdate: 'cascade',
     primaryKey: true,
     references: { model: 'assignment' },
@@ -212,7 +211,7 @@ var assignment_team = {
   },
   team_id: {
     allowNull: false,
-    onDelete: 'restrict',
+    onDelete: 'cascade',
     onUpdate: 'cascade',
     primaryKey: true,
     references: { model: 'team' },

@@ -50,6 +50,7 @@ var routesModule = {
     app.post('/:username/course', isOwner, course.create);
     app.get ('/:username/:courseLabel', isAuthenticated, course.homepage);
     app.post('/:username/:courseLabel', isStaff, course.update);
+    app.post('/:username/:courseLabel/delete', isOwner, course.delete);
     app.get ('/:username/:courseLabel/edit', isStaff, course.edit);
     app.post('/:username/:courseLabel/staff', isStaff, course.staffUpdate);
     app.get ('/:username/:courseLabel/staff/edit', isStaff, course.staffEdit);
@@ -60,6 +61,7 @@ var routesModule = {
     app.post('/:username/:courseLabel/assignment', isStaff, assignment.create);
     app.get ('/:username/:courseLabel/:assignmentAbbr', isAuthenticated, assignment.homepage);
     app.post('/:username/:courseLabel/:assignmentAbbr', isStaff, assignment.update);
+    app.post('/:username/:courseLabel/:assignmentAbbr/delete', isStaff, assignment.delete);
     app.get ('/:username/:courseLabel/:assignmentAbbr/edit', isStaff, assignment.edit);
 
     app.get('/:username/:courseLabel/:assignmentAbbr/team', isAuthenticated, team.homepage);

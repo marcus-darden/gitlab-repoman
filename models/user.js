@@ -12,11 +12,11 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         User.belongsToMany(models.Team, {
-          onDelete: 'restrict',
+          onDelete: 'cascade',
           through: 'user_team'
         });
         User.belongsToMany(models.Course, {
-          onDelete: 'restrict',
+          onDelete: 'cascade',
           through: models.Role
         });
       }

@@ -52,7 +52,7 @@ module.exports = {
     var user, course;
     var courseOb = getCourseObject(form);
 
-    models.User.findById(user_id).then(function(_user) {
+    return models.User.findById(user_id).then(function(_user) {
       user = _user;
       return models.Course.create(courseOb);
     }).then(function(_course) {
@@ -60,6 +60,12 @@ module.exports = {
       return user.addCourse(course, { gitlab_role: 50 });
     }).then(function() {
       return course;
+    });
+  },
+
+  delete: function(course_label) {
+    return models.Course.destroy({
+      where: { label: course_label }
     });
   },
 

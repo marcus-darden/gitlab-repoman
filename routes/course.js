@@ -14,6 +14,13 @@ var courseModule = {
     });
   },
 
+  delete: function(req, res, next) {
+    // app.post('/:username/:courseLabel/delete', isOwner, course.delete);
+    helpers.course.delete(req.params.courseLabel).then(function() {
+      res.redirect(303, '/' + req.params.username);
+    });
+  },
+
   edit: function(req, res, next) {
     // app.get('/:username/:courseLabel/edit', isStaff, course.edit);
     var tokens = req.params.courseLabel.split('-');

@@ -48,6 +48,16 @@ module.exports = {
     });
   },
 
+  delete: function(course_label, assignment_abbr) {
+    return models.Assignment.destroy({
+      where: { abbr: assignment_abbr },
+      include: [{
+        model: models.Course,
+        where: { label: course_label }
+      }]
+    });
+  },
+
   get: function(course_label, assignment_abbr) {
     return models.Assignment.findOne({
       include: [{
