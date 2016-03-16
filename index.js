@@ -14,6 +14,8 @@ var app = express();
 app.locals.pretty = true;
 
 // configure Express
+app.use('/static', express.static(__dirname + '/public'));
+app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.set('view options', { layout: false });
@@ -27,12 +29,9 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: fals
 // persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/static', express.static(__dirname + '/public'));
-app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist'));
 
 // Routes
 var routes = require('./routes');
-app.use('/', routes.root);
-app.use('/auth', routes.auth);
+routes.init(app);
 
 app.listen(3000);

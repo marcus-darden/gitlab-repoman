@@ -1,16 +1,25 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Course = sequelize.define('course', {
-    number: DataTypes.STRING,
-    title: DataTypes.STRING,
-    semester: DataTypes.STRING,
-    active: DataTypes.BOOLEAN
+    label: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        unique: true
+    },
+    name: DataTypes.STRING,
+    active: {
+        allowNull: false,
+        defaultValue: false,
+        type: DataTypes.BOOLEAN
+    }
   }, {
-    underscored: true,
     classMethods: {
       associate: function(models) {
-        Course.hasMany(models.Assignment, { onDelete: 'delete' });
+        Course.hasMany(models.Assignment, {
+          onDelete: 'restrict'
+        });
         Course.belongsToMany(models.User, {
+          onDelete: 'restrict',
           through: models.Role
         });
       }

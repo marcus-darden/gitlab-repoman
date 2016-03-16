@@ -21,7 +21,8 @@ var config = {
     define: {
       underscored: true,
       freezeTableName: true
-    }
+    },
+    logging: false
   },
   production: {
     username: "repoman",

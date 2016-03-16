@@ -9,13 +9,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN
     }
   }, {
-    underscored: true,
     classMethods: {
       associate: function(models) {
         User.belongsToMany(models.Team, {
+          onDelete: 'restrict',
           through: 'user_team'
         });
         User.belongsToMany(models.Course, {
+          onDelete: 'restrict',
           through: models.Role
         });
       }

@@ -2,21 +2,27 @@
 module.exports = function(sequelize, DataTypes) {
   var Assignment = sequelize.define('assignment', {
     name: DataTypes.STRING,
-    abbr: DataTypes.CHAR(20),
+    abbr: DataTypes.STRING,
     description: DataTypes.STRING,
     number: DataTypes.INTEGER,
-    teamsize: DataTypes.INTEGER,
+    min_team_size: DataTypes.INTEGER,
+    max_team_size: DataTypes.INTEGER,
     create_teams: DataTypes.ENUM('manual', 'random', 'optin'),
-    active: DataTypes.BOOLEAN,
+    active: {
+      defaultValue: false,
+      type: DataTypes.BOOLEAN
+    },
     gitlab_group_id: DataTypes.INTEGER
   }, {
-    underscored: true,
     classMethods: {
       associate: function(models) {
         Assignment.belongsToMany(models.Team, {
-          through: 'team_assignment'
+          onDelete: 'restrict',
+          through: 'assignment_team'
         });
-        Assignment.belongsTo(models.Course, {});
+        Assignment.belongsTo(models.Course, {
+          onDelete: 'restrict'
+        });
       }
     }
   });

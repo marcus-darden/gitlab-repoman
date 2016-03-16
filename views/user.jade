@@ -1,43 +1,16 @@
-extends layout
+extends layout2
 
 block main
- 
-    form.form-horizontal#user_signup
-      .form-group
-        .middle
-          h4 Register Your GitHub
-      .form-group
-        label.col-md-3.control-label GitHub
-        .col-md-9
-          .row
-            .col-xs-3
-              img.pic(src="#{user.avatar}")
-            .col-xs-9
-              h3.name= user.display_name
-              .username= user.username
 
-      .form-group
-        label.col-md-3.control-label Uniqname
-        .col-md-9
-          .input-group
-            input.form-control(type='text', name="uniqname", placeholder='uniqname', value="#{user.username}", required, readonly)
-            span.input-group-btn
-              a.btn(href="#") @umich.edu
+    h2 Courses
+    a.btn.btn-success(href="/#{user.username}/course")
+      span.glyphicon.glyphicon-plus
+      | New Course
 
-      .form-group
-        label.col-md-3.control-label Team
-        .col-md-9
-          .input-group
- 
-            input.form-control(type='text', name="team_id", placeholder='Paste Key to Join Team', value="#{user.team_id ? user.team_id : ''}")
-            span.input-group-btn
-              a.btn.btn-success.new_team(href="#") Or Start New Team
-              a.btn.btn-danger.leave_team(href="/team/#{user.team_id}/quit", style="display:none") Leave
-              a.btn.btn-success.edit_team(href="/team/#{user.team_id}", style="display:none") Edit Team
+    h3 Taught(#{taught.length})
+    ul
+      each course in taught
+        li 
+          a(href='/' + user.username + '/' + course.label)= course.name ? course.name : course.label
 
-        .col-md-offset-3.col-md-9.message
-
-      .form-group
-        .col-md-offset-3.col-md-9
-          button.btn.btn-primary.btn-block#save(type='submit') Save Changes
-          a.btn.btn-danger.btn-block(href="/auth/logout") Logout
+    h3 Taken(#{taken.length})
