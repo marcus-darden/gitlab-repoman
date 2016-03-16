@@ -1,5 +1,8 @@
+'use strict';
+
 var models = require('../models');
 var helpers = require('../helpers');
+
 
 var assignmentModule = {
   new: function(req, res, next) {
@@ -11,30 +14,7 @@ var assignmentModule = {
 
   create: function(req, res, next) {
     // app.post('/:username/:courseLabel/assignment', isStaff, assignment.create);
-    var abbr, minTeamSize, maxTeamSize, createTeams;
-    //res.render('stub', req.params);
-    console.log('ASSIGNMENT CREATE');
-
-    // Clean assignment abbreviation
-    if (req.body.abbr.length)
-      abbr = req.body.abbr.toLowerCase().replace(' ', '-');
-    else
-      abbr = req.body.name.toLowerCase().replace(' ', '-');
-
-    // Clean team size variables
-    minTeamSize = Number(req.body.minTeamSize) || 1;
-    maxTeamSize = Number(req.body.maxTeamSize) || minTeamSize;
-
-    // Clean team creation method
-    createTeams = req.body.createTeams.toLowerCase().charAt(0);
-    if (createTeams === 'r')
-      createTeams = 'random';
-    else if (createTeams === 'o')
-      createTeams = 'optin';
-    else
-      createTeams = 'manual';
-
-    helpers.assignment.create(req.params.courseLabel, req.body.name, abbr, minTeamSize, maxTeamSize, createTeams).then(function(_assignment) {
+    helpers.assignment.create(req.params.courseLabel, req.body).then(function(_assignment) {
       res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel + '/' + _assignment.abbr);
     });
   },
@@ -57,7 +37,11 @@ var assignmentModule = {
 
   update: function(req, res, next) {
     // app.post('/:username/:courseLabel/:assignmentAbbr', isStaff, assignment.update);
-    res.render('stub', req.params);
+    helpers.assignment.update(req.params.courseLabel,
+                              req.params.assignmentAbbr,
+                              req.body).then(function(_assignment) {
+      res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel + '/' + _assignment.abbr);
+    });
   },
 
   edit: function(req, res, next) {

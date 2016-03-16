@@ -15,10 +15,9 @@ function isAuthenticated(req, res, next) {
 }
 
 function isOwner(req, res, next) {
-  console.log('isOwner');
-  if (req.isAuthenticated && req.user.username === req.params.username)
+  if (req.isAuthenticated && req.user && req.user.username === req.params.username)
     return next();
-  res.redirect(303, '/');
+  res.redirect(303, '/' + (req.user? req.user.username : ''));
 }
 
 function isStaff(req, res, next) {
@@ -43,7 +42,7 @@ var routesModule = {
       res.send('Hash ID: ' + req.params.hashid);
     });
 
-    app.get ('/:username', isAuthenticated, user.homepage);
+    app.get ('/:username', isOwner, user.homepage);
     app.post('/:username', isOwner, user.update);
     app.get ('/:username/edit', isOwner, user.edit);
 

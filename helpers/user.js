@@ -1,6 +1,14 @@
+'use strict';
+
 var models = require('../models');
 
 module.exports = {
+  get: function(user_username) {
+    return models.User.findOne({
+      where: { username: user_username }
+    });
+  },
+
   getRoster: function(course_id) {
     return models.User.findAll({
       include: [{

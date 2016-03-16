@@ -7,11 +7,10 @@ block main
       span.glyphicon.glyphicon-plus
       | New Course
 
-    h3 Taught
+    h3 Taught(#{taught.length})
     ul
       each course in taught
         li 
           a(href='/' + user.username + '/' + course.label)= course.name ? course.name : course.label
-    p #{taught.length} courses taught
-    h3 Taken
-    p #{taken.length} courses taken
+
+    h3 Taken(#{taken.length})

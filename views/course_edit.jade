@@ -4,7 +4,7 @@ block main
   h2 Courses
   h3 #{label ? 'Edit' : 'Create'} Course
   if label
-    - var formAction = '/' + params.username + '/' + params.courseLabel + '/edit'
+    - var formAction = '/' + params.username + '/' + params.courseLabel
   else
     - var formAction = '/' + params.username + '/course'
 

@@ -4,7 +4,7 @@ block main
   h2 Assignments
   h3 #{assignment ? 'Edit' : 'Create'} Assignment
   if assignment
-    - var formAction = '/' + params.username + '/' + params.courseLabel + '/' + params.assignmentAbbr + '/edit'
+    - var formAction = '/' + params.username + '/' + params.courseLabel + '/' + params.assignmentAbbr
   else
     - var formAction = '/' + params.username + '/' + params.courseLabel + '/assignment'
 

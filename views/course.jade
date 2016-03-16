@@ -5,7 +5,10 @@ block main
   h2= course.name ? course.name : course.label
   p
     a(href='/' + params.username + '/' + course.label + '/edit') edit course
+  p
+    | delete course
 
+  //- Assignments Tab
   h3 Assignments(#{assignments.length})
   ul
     each assignment in assignments
@@ -15,11 +18,8 @@ block main
     span.glyphicon.glyphicon-plus
     | New Assignment
 
+  //- Staff Tab
   h3 Staff(#{staff.length})
-  //-a.btn.btn-success(href="/#{params.username}/#{course.label}/assignment")
-    //-span.glyphicon.glyphicon-plus
-    //-| New Assignment
-
   ul
     each member in staff
       li= member.username
@@ -34,13 +34,9 @@ block main
       button.btn.btn-success(type='submit')
         span.glyphicon.glyphicon-plus
         | Include Staff Members
-  
-
+ 
+  //- Roster Tab
   h3 Roster(#{roster.length})
-  //-a.btn.btn-success(href="/#{params.username}/#{course.label}/assignment")
-    //-span.glyphicon.glyphicon-plus
-    //-| New Assignment
-
   ul
     each student in roster
       li= student.username
@@ -49,7 +45,7 @@ block main
     .form-group
       label.col-md-2.control-label Include Students
       textarea.form-control(
-        name='members',
+        name='students',
         placeholder='Insert uniqnames here separated by commas and/or whitespace'
       )
     .form-group
