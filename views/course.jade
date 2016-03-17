@@ -2,54 +2,65 @@ extends layout2
 
 block main
 
-  h2= course.name ? course.name : course.label
-  p
-    a.btn.btn-default(href='/' + params.username + '/' + course.label + '/edit') edit course
-  form#delete-course(name='delete-course', method='post', action='/#{params.username}/#{params.courseLabel}/delete')
-    .form-group
-      button.btn.btn-danger(type='submit') delete course
+  .container
+    h2= course.name ? course.name : course.label
+    p
+      a.btn.btn-default(href='/' + params.username + '/' + course.label + '/edit') edit course
+    form#delete-course(name='delete-course', method='post', action='/#{params.username}/#{params.courseLabel}/delete')
+      .form-group
+        button.btn.btn-danger(type='submit') delete course
 
-  //- Assignments Tab
-  h3 Assignments(#{assignments.length})
-  ul
-    each assignment in assignments
+  .container
+    ul.nav.nav-tabs
+      li.active
+        a(href='#1', data-toggle='tab') Assignments(#{assignments.length})
       li
-        a(href='/' + params.username + '/' + course.label + '/' + assignment.abbr)= assignment.name
-  a.btn.btn-success(href="/#{params.username}/#{course.label}/assignment")
-    span.glyphicon.glyphicon-plus
-    | New Assignment
+        a(href='#2', data-toggle='tab') Staff(#{staff.length})
+      li
+        a(href='#3', data-toggle='tab') Roster(#{roster.length})
 
-  //- Staff Tab
-  h3 Staff(#{staff.length})
-  ul
-    each member in staff
-      li= member.username
-  form#add-staff(name='add-staff', method='post', action='/#{params.username}/#{params.courseLabel}/staff')
-    .form-group
-      label.col-md-2.control-label Include Staff Members
-      textarea.form-control(
-        name='members',
-        placeholder='Insert uniqnames here separated by commas and/or whitespace'
-      )
-    .form-group
-      button.btn.btn-success(type='submit')
-        span.glyphicon.glyphicon-plus
-        | Include Staff Members
+    .tab-content
+      //- Assignment Tab
+      .tab-pane.active#1
+        ul
+          each assignment in assignments
+            li
+              a(href='/' + params.username + '/' + course.label + '/' + assignment.abbr)= assignment.name
+        a.btn.btn-success(href="/#{params.username}/#{course.label}/assignment")
+          span.glyphicon.glyphicon-plus
+          | New Assignment
+
+      //- Staff Tab
+      .tab-pane#2 
+        ul
+          each member in staff
+            li= member.username
+        form#add-staff(name='add-staff', method='post', action='/#{params.username}/#{params.courseLabel}/staff')
+          .form-group
+            label.col-md-2.control-label Include Staff Members
+            textarea.form-control(
+              name='members',
+              placeholder='Insert uniqnames here separated by commas and/or whitespace'
+            )
+          .form-group
+            button.btn.btn-success(type='submit')
+              span.glyphicon.glyphicon-plus
+              | Include Staff Members
  
-  //- Roster Tab
-  h3 Roster(#{roster.length})
-  ul
-    each student in roster
-      li= student.username
-  form#add-roster
-  form#add-roster(name='add-roster', method='post', action='/#{params.username}/#{params.courseLabel}/roster')
-    .form-group
-      label.col-md-2.control-label Include Students
-      textarea.form-control(
-        name='students',
-        placeholder='Insert uniqnames here separated by commas and/or whitespace'
-      )
-    .form-group
-      button.btn.btn-success(type='submit')
-        span.glyphicon.glyphicon-plus
-        | Include Students
+      //- Roster Tab
+      .tab-pane#3
+        ul
+          each student in roster
+            li= student.username
+        form#add-roster
+        form#add-roster(name='add-roster', method='post', action='/#{params.username}/#{params.courseLabel}/roster')
+          .form-group
+            label.col-md-2.control-label Include Students
+            textarea.form-control(
+              name='students',
+              placeholder='Insert uniqnames here separated by commas and/or whitespace'
+            )
+          .form-group
+            button.btn.btn-success(type='submit')
+              span.glyphicon.glyphicon-plus
+              | Include Students
