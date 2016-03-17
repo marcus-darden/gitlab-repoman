@@ -29,6 +29,15 @@ block main
           value=(assignment ? assignment.abbr : '')
         )
     .form-group
+      label.col-md-2.control-label Team Creation Method
+      .col-md-8.col-md-offset-2
+        input.form-control(
+          type='text',
+          name='createTeams',
+          placeholder='choose one of: solo, manual, random, or optin',
+          value=(assignment ? assignment.create_teams : '')
+        )
+    .form-group
       label.col-md-2.control-label Minimum Team Size
       .col-md-8.col-md-offset-2
         input.form-control(
@@ -45,15 +54,6 @@ block main
           name='maxTeamSize',
           placeholder='e.g. 5 or leave blank to set max = min',
           value=(assignment ? assignment.max_team_size : '')
-        )
-    .form-group
-      label.col-md-2.control-label Team Creation Method
-      .col-md-8.col-md-offset-2
-        input.form-control(
-          type='text',
-          name='createTeams',
-          placeholder='choose: manual, random, or optin',
-          value=(assignment ? assignment.create_teams : '')
         )
     .form-group
       .col-md-2

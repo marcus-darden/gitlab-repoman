@@ -7,7 +7,10 @@ module.exports = function(sequelize, DataTypes) {
     number: DataTypes.INTEGER,
     min_team_size: DataTypes.INTEGER,
     max_team_size: DataTypes.INTEGER,
-    create_teams: DataTypes.ENUM('manual', 'random', 'optin'),
+    create_teams: {
+      defaultValue: 'solo',
+      type: DataTypes.ENUM('manual', 'random', 'solo', 'optin')
+    },
     active: {
       defaultValue: false,
       type: DataTypes.BOOLEAN

@@ -87,7 +87,8 @@ var assignment = {
     type: Sequelize.INTEGER
   },
   create_teams: {
-    type: Sequelize.ENUM('manual', 'random', 'optin')
+    defaultValue: 'solo',
+    type: Sequelize.ENUM('manual', 'random', 'solo', 'optin')
   },
   active: {
     defaultValue: false,

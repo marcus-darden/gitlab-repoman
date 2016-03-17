@@ -13,18 +13,28 @@ function getAssignmentObject(form) {
   else
     obj.abbr = form.name.toLowerCase().replace(' ', '-');
 
-  // Clean team size variables
-  obj.min_team_size = Number(form.minTeamSize) || 1;
-  obj.max_team_size = Number(form.maxTeamSize) || obj.min_team_size;
-
-  // Clean team creation method
+  // Clean team creation method and team size variables
   obj.create_teams = form.createTeams.toLowerCase().charAt(0);
-  if (obj.create_teams === 'r')
-    obj.create_teams = 'random';
-  else if (obj.create_teams === 'o')
-    obj.create_teams = 'optin';
-  else
+  if (obj.create_teams === 'm') {
     obj.create_teams = 'manual';
+    obj.min_team_size = 1;
+    obj.max_team_size = 0;
+  }
+  else if (obj.create_teams === 'r') {
+    obj.create_teams = 'random';
+    obj.max_team_size = Number(form.maxTeamSize) || 2;
+    obj.min_team_size = obj.max_team_size - 1;
+  }
+  else if (obj.create_teams === 's') {
+    obj.create_teams = 'solo';
+    obj.min_team_size = 1;
+    obj.max_team_size = 1;
+  }
+  else {
+    obj.create_teams = 'optin';
+    obj.min_team_size = Number(form.minTeamSize) || 2;
+    obj.max_team_size = Number(form.maxTeamSize) || obj.min_team_size;
+  }
 
   return obj;
 }
