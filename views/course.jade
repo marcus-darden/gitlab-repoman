@@ -1,12 +1,43 @@
 extends layout2
 
+mixin assignment(assignment)
+  li.list-group-item.assignment.js-toggle-container
+    span.list-item-name
+      strong
+        a(href='/#{user.username}/#{course.label}/#{assignment.abbr}')= assignment.name
+
+mixin staff_member(user)
+  li.list-group-item.staff_member.js-toggle-container
+    span.list-item-name
+      img.avatar.s24(src='#{user.avatar || "/static/img/no_avatar.png"}')
+      strong
+        a(href='/#{user.username}') #{user.username}
+      | &nbsp;
+      span #{user.display_name}
+    span.pull-right
+      strong Access
+      button.btn.btn-xs.js-toggle-button(title='Edit access level') &nbsp;
+      a.btn.btn-xs.btn-remove(data-confirm='Are you sure?', title='Remove user', rel='nofollow', data-method='delete', href='/remove/this/member')
+        i.fa.fa-minus.fa-inverse
+
+mixin student(user)
+  li.list-group-item.student.js-toggle-container
+    span.list-item-name
+      img.avatar.s24(src='#{user.avatar || "/static/img/no_avatar.png"}')
+      strong
+        a(href='/#{user.username}') #{user.username}
+      span #{user.display_name}
+    span.pull-right
+      a.btn.btn-xs.btn-remove(data-confirm='Are you sure?', title='Remove user', rel='nofollow', data-method='delete', href='/remove/this/member')
+        i.fa.fa-minus.fa-inverse
+
 block main
 
   .container
     h2= course.name ? course.name : course.label
     p
-      a.btn.btn-default(href='/' + params.username + '/' + course.label + '/edit') edit course
-    form#delete-course(name='delete-course', method='post', action='/#{params.username}/#{params.courseLabel}/delete')
+      a.btn.btn-default(href='/#{user.username}/#{course.label}/edit') edit course
+    form#delete-course(name='delete-course', method='post', action='/#{user.username}/#{course.label}/delete')
       .form-group
         button.btn.btn-danger(type='submit') delete course
 
@@ -22,20 +53,22 @@ block main
     .tab-content
       //- Assignment Tab
       .tab-pane.active#1
-        ul
-          each assignment in assignments
-            li
-              a(href='/' + params.username + '/' + course.label + '/' + assignment.abbr)= assignment.name
-        a.btn.btn-success(href="/#{params.username}/#{course.label}/assignment")
+        //- Add new assignment
+        a.btn.btn-success(href="/#{user.username}/#{course.label}/assignment")
           span.glyphicon.glyphicon-plus
           | New Assignment
+        //- Assignment listing
+        .panel.panel-default
+          .panel-heading
+            strong Assignments
+          ul.list-group
+            each assignment in assignments
+              +assignment(assignment)
 
       //- Staff Tab
       .tab-pane#2 
-        ul
-          each member in staff
-            li= member.username
-        form#add-staff(name='add-staff', method='post', action='/#{params.username}/#{params.courseLabel}/staff')
+        //- Add staff members
+        form#add-staff(name='add-staff', method='post', action='/#{user.username}/#{course.label}/staff')
           .form-group
             label.col-md-2.control-label Include Staff Members
             textarea.form-control(
@@ -46,14 +79,18 @@ block main
             button.btn.btn-success(type='submit')
               span.glyphicon.glyphicon-plus
               | Include Staff Members
+        //- Staff member listing
+        .panel.panel-default
+          .panel-heading
+            strong Staff Members
+          ul.list-group
+            each member in staff
+              +staff_member(member)
  
       //- Roster Tab
       .tab-pane#3
-        ul
-          each student in roster
-            li= student.username
-        form#add-roster
-        form#add-roster(name='add-roster', method='post', action='/#{params.username}/#{params.courseLabel}/roster')
+        //- Add students
+        form#add-roster(name='add-roster', method='post', action='/#{user.username}/#{course.label}/roster')
           .form-group
             label.col-md-2.control-label Include Students
             textarea.form-control(
@@ -64,3 +101,10 @@ block main
             button.btn.btn-success(type='submit')
               span.glyphicon.glyphicon-plus
               | Include Students
+        //- Student roster listing
+        .panel.panel-default
+          .panel-heading
+            strong Student Roster
+          ul.list-group
+            each student in roster
+              +student(student)
