@@ -14,8 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     active: {
       defaultValue: false,
       type: DataTypes.BOOLEAN
-    },
-    gitlab_group_id: DataTypes.INTEGER
+    }
   }, {
     classMethods: {
       associate: function(models) {

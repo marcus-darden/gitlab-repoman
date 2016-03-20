@@ -7,6 +7,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true
     },
     name: DataTypes.STRING,
+    gitlab_group_id: DataTypes.INTEGER,
     active: {
         allowNull: false,
         defaultValue: false,

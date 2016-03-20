@@ -17,6 +17,9 @@ var user = {
   avatar: {
     type: Sequelize.STRING
   },
+  gitlab_user_id: {
+    type: Sequelize.INTEGER
+  },
   course_creator: {
     defaultValue: false,
     type: Sequelize.BOOLEAN
@@ -45,6 +48,9 @@ var course = {
   },
   name: {
     type: Sequelize.STRING
+  },
+  gitlab_group_id: {
+    type: Sequelize.INTEGER
   },
   active: {
     allowNull: false,
@@ -94,9 +100,6 @@ var assignment = {
     defaultValue: false,
     type: Sequelize.BOOLEAN
   },
-  gitlab_group_id: {
-    type: Sequelize.INTEGER
-  },
   created_at: {
     allowNull: false,
     type: Sequelize.DATE
@@ -136,7 +139,7 @@ var team = {
 }; // team
 
 var role = {
-  gitlab_role: {
+  gitlab_access_level: {
     allowNull: false,
     type: Sequelize.INTEGER
   },

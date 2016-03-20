@@ -36,7 +36,7 @@ function getCourseObject(form) {
 
 
 module.exports = {
-  addUsers: function(course_label, users, gitlab_role) {
+  addUsers: function(course_label, users, gitlab_access_level) {
     var course;
 
     return models.Course.findOne({
@@ -44,7 +44,7 @@ module.exports = {
     }).then(function(_course) {
       course = _course;
 
-      return course.addUsers(users, { gitlab_role: gitlab_role });
+      return course.addUsers(users, { gitlab_access_level: gitlab_access_level });
     });
   },
 
@@ -52,12 +52,13 @@ module.exports = {
     var user, course;
     var courseOb = getCourseObject(form);
 
+    // Add course to DB
     return models.User.findById(user_id).then(function(_user) {
       user = _user;
       return models.Course.create(courseOb);
     }).then(function(_course) {
       course = _course;
-      return user.addCourse(course, { gitlab_role: 50 });
+      return user.addCourse(course, { gitlab_access_level: 50 });
     }).then(function() {
       return course;
     });
@@ -80,14 +81,14 @@ module.exports = {
       include: [{
         model: models.User,
         where: { id: user_id },
-        through: { where: { gitlab_role: { $gte: 40 } } }
+        through: { where: { gitlab_access_level: [20, 40, 50] } }
       }]
     });
     var taken = models.Course.findAll({
       include: [{
         model: models.User,
         where: { id: user_id },
-        through: { where: { gitlab_role: { $lt: 40 } } }
+        through: { where: { gitlab_access_level: 30 } }
       }]
     });
     return models.sequelize.Promise.all([taught, taken]);
@@ -99,7 +100,7 @@ module.exports = {
       include: [{
         model: models.User,
         where: { username: user_username },
-        through: { where: { gitlab_role: { $gte: 40 } } }
+        through: { where: { gitlab_access_level: [20, 40, 50] } }
       }]
     }).then(function(_count) {
       return _count !== 0;

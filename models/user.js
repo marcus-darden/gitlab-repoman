@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     username: DataTypes.CHAR(8),
     display_name: DataTypes.STRING,
     avatar: DataTypes.STRING,
+    gitlab_user_id: DataTypes.INTEGER,
     course_creator: {
       defaultValue: false,
       type: DataTypes.BOOLEAN
