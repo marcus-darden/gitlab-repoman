@@ -76,22 +76,24 @@ module.exports = {
     });
   },
 
-  getUserCourses: function(user_id) {
-    var taught = models.Course.findAll({
+  getCoursesTaught: function(user_id) {
+    return models.Course.findAll({
       include: [{
         model: models.User,
         where: { id: user_id },
         through: { where: { gitlab_access_level: [20, 40, 50] } }
       }]
     });
-    var taken = models.Course.findAll({
+  },
+
+  getCoursesTaken: function(user_id) {
+    return models.Course.findAll({
       include: [{
         model: models.User,
         where: { id: user_id },
         through: { where: { gitlab_access_level: 30 } }
       }]
     });
-    return models.sequelize.Promise.all([taught, taken]);
   },
 
   isStaff: function(user_username, course_label) {

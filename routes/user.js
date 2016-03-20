@@ -1,17 +1,21 @@
 'use strict';
 
 var models = require('../models');
-var helpers = require('../helpers');
+var courseHelper = require('../helpers/course');
 
 var userModule = {
   homepage: function(req, res, next) {
     // app.get('/:username', isAuthenticated, user.homepage);
-    helpers.course.getUserCourses(req.user.id).then(function(_values) {
+    var taught, taken;
+    return courseHelper.getCoursesTaught(req.user.id).then(function(_taught) {
+      taught = _taught;
+      return courseHelper.getCoursesTaken(req.user.id);
+    }).then(function(_taken) {
+      taken = _taken;
       res.render('user', {
         user: req.user,
-        taught: _values[0],
-        taken: _values[1],
-        params: req.params
+        taught: taught,
+        taken: taken
       });
     });
   },

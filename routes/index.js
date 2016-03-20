@@ -1,6 +1,6 @@
 'use strict';
 
-var helpers = require('../helpers');
+var courseHelper = require('../helpers/course');
 
 // route handlers
 var user = require('./user');
@@ -22,7 +22,7 @@ function isOwner(req, res, next) {
 
 function isStaff(req, res, next) {
   if (req.isAuthenticated()) {
-    helpers.course.isStaff(req.params.username, req.params.courseLabel).then(function(_isStaff) {
+    courseHelper.isStaff(req.params.username, req.params.courseLabel).then(function(_isStaff) {
       if (_isStaff)
         return next();
       else

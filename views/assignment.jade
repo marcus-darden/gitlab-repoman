@@ -4,7 +4,7 @@ block main
 
   h4
     a(href='.') Data Structures & Algorithms
-  h2= assignment.name + " (" + assignment.abbr + ")"
+  h2= assignment.name + ' (' + assignment.abbr + ')'
   case assignment.create_teams
     when 'solo'
       p Individuals only (no teams)
@@ -15,8 +15,8 @@ block main
     when 'optin'
       p Student formed teams (#{assignment.min_team_size}#{assignment.max_team_size === assignment.min_team_size ? '' : "-" + assignment.max_team_size} members)
   p
-    a.btn.btn-default(href='/' + params.username + '/' + params.courseLabel + '/' + assignment.abbr + '/edit') edit assignment
-  form#delete-assignment(name='delete-assignment', method='post', action='/#{params.username}/#{params.courseLabel}/#{assignment.abbr}/delete')
+    a.btn.btn-default(href='/#{user.username}/#{course_label}/#{assignment.abbr}/edit') edit assignment
+  form#delete-assignment(name='delete-assignment', method='post', action='/#{user.username}/#{course_label}/#{assignment.abbr}/delete')
     .form-group
       button.btn.btn-danger(type='submit') delete assignment
 

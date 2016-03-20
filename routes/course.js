@@ -1,7 +1,8 @@
 'use strict';
 
 var models = require('../models');
-var helpers = require('../helpers');
+var userHelper = require('../helpers/user');
+var courseHelper = require('../helpers/course');
 
 function getCourseObject(form) {
 }
@@ -9,14 +10,14 @@ function getCourseObject(form) {
 var courseModule = {
   create: function(req, res, next) {
     // app.post('/:username/course', isOwner, course.create);
-    helpers.course.create(req.user.id, req.body).then(function(_course) {
+    courseHelper.create(req.user.id, req.body).then(function(_course) {
       res.redirect(303, '/' + req.params.username + '/' + _course.label);
     });
   },
 
   delete: function(req, res, next) {
     // app.post('/:username/:courseLabel/delete', isOwner, course.delete);
-    helpers.course.delete(req.params.courseLabel).then(function() {
+    courseHelper.delete(req.params.courseLabel).then(function() {
       res.redirect(303, '/' + req.params.username);
     });
   },
@@ -44,11 +45,11 @@ var courseModule = {
       label.semester = label.semester.charAt(0).toUpperCase()
                        + label.semester.slice(1);
 
-    helpers.course.get(req.params.courseLabel).then(function(_course) {
+    courseHelper.get(req.params.courseLabel).then(function(_course) {
       res.render('course_edit', {
+        user: req.user,
         label: label,
-        courseName: _course.name,
-        params: req.params
+        courseName: _course.name
       });
     });
   },
@@ -57,11 +58,11 @@ var courseModule = {
     // app.get('/:username/:courseLabel', isAuthenticated, course.homepage);
     var course, staff, roster, assignments;
 
-    helpers.course.get(req.params.courseLabel).then(function(_course) {
+    courseHelper.get(req.params.courseLabel).then(function(_course) {
       course = _course;
 
-      staff = helpers.user.getStaff(course.id);
-      roster = helpers.user.getRoster(course.id);
+      staff = userHelper.getStaff(course.id);
+      roster = userHelper.getRoster(course.id);
       assignments = course.getAssignments();
 
       return models.Sequelize.Promise.all([
@@ -72,11 +73,11 @@ var courseModule = {
       ]);
     }).spread(function(_course, _staff, _roster, _assignments) {
       res.render('course', {
+        user: req.user,
         course: _course,
         staff: _staff,
         roster: _roster,
-        assignments: _assignments,
-        params: req.params
+        assignments: _assignments
       });
     });
   },
@@ -84,7 +85,7 @@ var courseModule = {
   new: function(req, res, next) {
     // app.get('/:username/course', isOwner, course.new);
     res.render('course_edit', {
-      params: req.params
+      user: req.user
     });
   },
 
@@ -102,8 +103,8 @@ var courseModule = {
       return;
     }
     uniqnames = uniqnames.split(/[.,;\s]+/);
-    helpers.user.getUsers(uniqnames).then(function(_users) {
-      helpers.course.addUsers(req.params.courseLabel, _users, 30).then(function() {
+    userHelper.getUsers(uniqnames).then(function(_users) {
+      courseHelper.addUsers(req.params.courseLabel, _users, 30).then(function() {
         res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
       });
     });
@@ -123,8 +124,8 @@ var courseModule = {
       return;
     }
     uniqnames = uniqnames.split(/[.,;\s]+/);
-    helpers.user.getUsers(uniqnames).then(function(_users) {
-      helpers.course.addUsers(req.params.courseLabel, _users, 40).then(function() {
+    userHelper.getUsers(uniqnames).then(function(_users) {
+      courseHelper.addUsers(req.params.courseLabel, _users, 40).then(function() {
         res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
       });
     });
@@ -132,7 +133,7 @@ var courseModule = {
 
   update: function(req, res, next) {
     // app.post('/:username/:courseLabel', isStaff, course.update);
-    helpers.course.update(req.params.courseLabel, req.body).then(function(_course) {
+    courseHelper.update(req.params.courseLabel, req.body).then(function(_course) {
       res.redirect(303, '/' + req.params.username + '/' + _course.label);
     });
   }
