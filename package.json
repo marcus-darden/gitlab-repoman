@@ -31,7 +31,7 @@
     "bootstrap": "^3.3.6",
     "express": "^4.13.4",
     "express-session": "^1.12.1",
-    "gitlab": "^1.5.0",
+    "gitlab": "git+https://github.com/marcus-darden/node-gitlab.git",
     "jade": "^1.11.0",
     "method-override": "^2.3.5",
     "passport": "^0.3.2",
