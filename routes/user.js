@@ -1,9 +1,14 @@
 'use strict';
 
+var express = require('express');
+var passport = require('passport');
 var models = require('../models');
 var courseHelper = require('../helpers/course');
+var middleware = require('../helpers/middleware');
 
-var userModule = {
+var router = express.Router();
+
+var routes = {
   homepage: function(req, res, next) {
     // app.get('/:username', isAuthenticated, user.homepage);
     var taught, taken;
@@ -22,13 +27,24 @@ var userModule = {
 
   update: function(req, res, next) {
     // app.post('/:username', isOwner, user.update);
-    res.render('stub', req.params);
+    res.sendStatus(201);
   },
 
   edit: function(req, res, next) {
     // app.get('/:username/edit', isOwner, user.edit);
-    res.render('stub', req.params);
+    res.render(200);
   }
 };
 
-module.exports = userModule;
+// Protect these routes behind authentication
+router.use(passport.authenticate('gitlab', { failureRedirect: '/login' }));
+
+// Connect the routes to handlers
+router.get('/:username', routes.homepage);
+router.post('/:username', middleware.isOwner, routes.update);
+router.get('/:username/edit', middleware.isOwner, routes.edit);
+
+module.exports = {
+  router: router,
+  routes: routes
+};
