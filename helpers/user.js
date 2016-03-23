@@ -14,7 +14,7 @@ module.exports = {
       include: [{
         model: models.Course,
         where: { id: course_id },
-        through: { where: { gitlab_role: { $lt: 40 } } }
+        through: { where: { gitlab_access_level: 30 } }
       }]
     });
   },
@@ -24,7 +24,7 @@ module.exports = {
       include: [{
         model: models.Course,
         where: { id: course_id },
-        through: { where: { gitlab_role: { $gte: 40 } } }
+        through: { where: { gitlab_access_level: [20, 40, 50] } }
       }]
     });
   },

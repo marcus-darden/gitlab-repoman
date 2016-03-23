@@ -4,9 +4,9 @@ block main
   h2 Courses
   h3 #{label ? 'Edit' : 'Create'} Course
   if label
-    - var formAction = '/' + params.username + '/' + params.courseLabel
+    - var formAction = '/' + user.username + '/' + course.label
   else
-    - var formAction = '/' + params.username + '/course'
+    - var formAction = '/' + user.username + '/course'
 
   form#course-edit(name='course-edit', method='post', action=formAction)
     .form-group
@@ -72,6 +72,6 @@ block main
         button.btn.btn-success(type='submit') #{label ? 'Edit' : 'Create'} Course
       .col-md-8.col-md-offset-2
         if label
-          a.btn.btn-default(href='/#{params.username}/#{params.courseLabel}') Cancel
+          a.btn.btn-default(href='/#{user.username}/#{course.label}') Cancel
         else
-          a.btn.btn-default(href='/#{params.username}') Cancel
+          a.btn.btn-default(href='/#{user.username}') Cancel

@@ -4,9 +4,9 @@ block main
   h2 Assignments
   h3 #{assignment ? 'Edit' : 'Create'} Assignment
   if assignment
-    - var formAction = '/' + params.username + '/' + params.courseLabel + '/' + params.assignmentAbbr
+    - var formAction = '/' + user.username + '/' + course_label + '/' + assignment.abbr
   else
-    - var formAction = '/' + params.username + '/' + params.courseLabel + '/assignment'
+    - var formAction = '/' + user.username + '/' + course_label + '/assignment'
 
   form#assignment-edit(name='assignment-edit', method='post', action=formAction)
     .form-group
@@ -60,6 +60,6 @@ block main
         button.btn.btn-success(type='submit') #{assignment ? 'Edit' : 'Create'} Assignment
       .col-md-8.col-md-offset-2
         if assignment
-          a.btn.btn-default(href='/#{params.username}/#{params.courseLabel}/#{params.assignmentAbbr}') Cancel
+          a.btn.btn-default(href='/#{user.username}/#{course_label}/#{assignment.abbr}') Cancel
         else
-          a.btn.btn-default(href='/#{params.username}/#{params.courseLabel}') Cancel
+          a.btn.btn-default(href='/#{user.username}/#{course_label}') Cancel

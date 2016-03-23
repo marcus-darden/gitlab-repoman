@@ -114,3 +114,15 @@ body {
 .name { margin-top: 0px; margin-bottom: 5px; }
 .member { margin-bottom: 10px; }
 .btn-group { margin-top: 5px; }
+
+
+/* Fixes */
+.avatar {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.avatar.s24 {
+  width: 24px;
+  height: 24px;
+}

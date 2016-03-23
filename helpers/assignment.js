@@ -83,14 +83,14 @@ module.exports = {
       include: [{
         model: models.User,
         where: { id: user_id },
-        through: { where: { gitlab_role: { $gte: 40 } } }
+        through: { where: { gitlab_access_level: [20, 40, 50] } }
       }]
     });
     var taken = models.Course.findAll({
       include: [{
         model: models.User,
         where: { id: user_id },
-        through: { where: { gitlab_role: { $lt: 40 } } }
+        through: { where: { gitlab_access_level: 30 } }
       }]
     });
     return models.sequelize.Promise.all([taught, taken]);
