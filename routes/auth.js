@@ -19,10 +19,16 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-router.get('/gitlab', passport.authenticate('gitlab'));
+router.get('/:strategy',
+  function(req, res, next) {
+    passport.authenticate(req.params.strategy)(req, res, next);
+  }
+);
 
-router.get('/gitlab/callback',
-  passport.authenticate('gitlab', { failureRedirect: '/' }),
+router.get('/:strategy/callback', 
+  function(req, res, next) {
+    passport.authenticate(req.params.strategy, { failureRedirect: '/' })(req, res, next);
+  },
   function(req, res, next) {
     res.redirect('/' + req.user.username);
   }
