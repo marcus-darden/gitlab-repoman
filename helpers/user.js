@@ -50,4 +50,17 @@ helpers.getUsers = function(usernames) {
   });
 };
 
+helpers.login = function(profile) {
+  return models.User.findOrCreate({
+    where: { username: profile.username },
+  }).spread(function (_user, _created) {
+    // Update user properties from GL
+    return _user.update({
+      display_name: profile.displayName,
+      avatar: profile.avatar,
+      gitlab_user_id: profile.id,  // Maybe first time only
+    });
+  });
+};
+
 module.exports = helpers;

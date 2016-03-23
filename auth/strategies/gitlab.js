@@ -1,40 +1,24 @@
 'use strict';
 
-var config = require('../../config');
-var models = require('../../models');
 var GitlabStrategy = require('passport-gitlab').Strategy;
+var config = require('../../config');
+var gitlabHelper = require('../../helpers/gitlab');
 
-var strategy = new GitlabStrategy({
+var gitlabOptions = {
   clientID: config.GITLAB_APP_KEY,
   clientSecret: config.GITLAB_APP_SECRET,
   gitlabURL: config.GITLAB_URL,
-  callbackURL: config.GITLAB_CALLBACK_URL
-}, function (token, tokenSecret, profile, done) {
-  models.User.findOrCreate({
-    where: { username: profile.username }
-  }).spread(function (user, created) {
-    // Update user properties from GL
-    models.User.update({
-      display_name: profile.displayName,
-      avatar: profile.avatar,
-    }, {
-      where: {
-        id: user.id
-      },
-      returning: true
-    }).spread(function(num_affected, updated_users) {
-      if (num_affected == 1)
-        var u = updated_users[0].get({ plain: true });
-      else
-        var u = user.get({ plain: true });
-      u.display_name = profile.displayName;
-      u.avatar = profile.avatar;
-      u.oauth_token = token;
-      done(null, u);
-    });
-  }).catch(function (e) {
-    done(e, null);
-  });
-});
+  callbackURL: config.GITLAB_CALLBACK_URL,
+};
 
-module.exports = strategy;
+var gitlabVerify = function (token, tokenSecret, profile, done) {
+  return gitlabHelper.login(profile).then(function(_user) {
+    var u = _user.get({ plain: true });
+    u.oauth_token = token;
+    return done(null, u);
+  }).catch(function(_err) {
+    return done(_err, null);
+  });
+};
+
+module.exports = new GitlabStrategy(gitlabOptions, gitlabVerify);
