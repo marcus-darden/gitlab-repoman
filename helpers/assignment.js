@@ -2,7 +2,6 @@
 
 var models = require('../models');
 
-
 function getAssignmentObject(form) {
   var obj = { name: form.name };
   var abbr, minTeamSize, maxTeamSize, createTeams;
@@ -39,74 +38,75 @@ function getAssignmentObject(form) {
   return obj;
 }
 
+var helpers = {};
 
-module.exports = {
-  create: function(course_label, form) {
-    var course, assignment;
-    var assignmentOb = getAssignmentObject(form);
+helpers.create = function(course_label, form) {
+  var course, assignment;
+  var assignmentOb = getAssignmentObject(form);
 
-    return models.Course.findOne({
-      where: { label: course_label }
-    }).then(function(_course) {
-      course = _course;
-      return models.Assignment.create(assignmentOb);
-    }).then(function(_assignment) {
-      assignment = _assignment;
-      return course.addAssignment(assignment);
-    }).then(function() {
-      return assignment;
-    });
-  },
-
-  delete: function(course_label, assignment_abbr) {
-    return models.Assignment.destroy({
-      where: { abbr: assignment_abbr },
-      include: [{
-        model: models.Course,
-        where: { label: course_label }
-      }]
-    });
-  },
-
-  get: function(course_label, assignment_abbr) {
-    return models.Assignment.findOne({
-      include: [{
-        model: models.Course,
-        where: { label: course_label }
-      }],
-      where: { abbr: assignment_abbr }
-    });
-  },
-
-  getUserCourses: function(user_id) {
-    var taught = models.Course.findAll({
-      include: [{
-        model: models.User,
-        where: { id: user_id },
-        through: { where: { gitlab_access_level: [20, 40, 50] } }
-      }]
-    });
-    var taken = models.Course.findAll({
-      include: [{
-        model: models.User,
-        where: { id: user_id },
-        through: { where: { gitlab_access_level: 30 } }
-      }]
-    });
-    return models.sequelize.Promise.all([taught, taken]);
-  },
-
-  update: function(course_label, assignment_abbr, form) {
-    var assignmentOb = getAssignmentObject(form);
-
-    return models.Assignment.findOne({
-      where: { abbr: assignment_abbr },
-      include: [{
-        model: models.Course,
-        where: { label: course_label }
-      }]
-    }).then(function(_assignment) {
-      return _assignment.update(assignmentOb);
-    });
-  }
+  return models.Course.findOne({
+    where: { label: course_label }
+  }).then(function(_course) {
+    course = _course;
+    return models.Assignment.create(assignmentOb);
+  }).then(function(_assignment) {
+    assignment = _assignment;
+    return course.addAssignment(assignment);
+  }).then(function() {
+    return assignment;
+  });
 };
+
+helpers.delete = function(course_label, assignment_abbr) {
+  return models.Assignment.destroy({
+    where: { abbr: assignment_abbr },
+    include: [{
+      model: models.Course,
+      where: { label: course_label }
+    }]
+  });
+};
+
+helpers.get = function(course_label, assignment_abbr) {
+  return models.Assignment.findOne({
+    include: [{
+      model: models.Course,
+      where: { label: course_label }
+    }],
+    where: { abbr: assignment_abbr }
+  });
+};
+
+helpers.getUserCourses = function(user_id) {
+  var taught = models.Course.findAll({
+    include: [{
+      model: models.User,
+      where: { id: user_id },
+      through: { where: { gitlab_access_level: [20, 40, 50] } }
+    }]
+  });
+  var taken = models.Course.findAll({
+    include: [{
+      model: models.User,
+      where: { id: user_id },
+      through: { where: { gitlab_access_level: 30 } }
+    }]
+  });
+  return models.sequelize.Promise.all([taught, taken]);
+};
+
+helpers.update = function(course_label, assignment_abbr, form) {
+  var assignmentOb = getAssignmentObject(form);
+
+  return models.Assignment.findOne({
+    where: { abbr: assignment_abbr },
+    include: [{
+      model: models.Course,
+      where: { label: course_label }
+    }]
+  }).then(function(_assignment) {
+    return _assignment.update(assignmentOb);
+  });
+};
+
+module.exports = helpers;
