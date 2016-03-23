@@ -6,7 +6,7 @@ var helpers = {};
 
 helpers.get = function(user_username) {
   return models.User.findOne({
-    where: { username: user_username }
+    where: { username: user_username },
   });
 };
 
@@ -15,7 +15,7 @@ helpers.getRoster = function(course_id) {
     include: [{
       model: models.Course,
       where: { id: course_id },
-      through: { where: { gitlab_access_level: 30 } }
+      through: { where: { gitlab_access_level: 30 } },
     }]
   });
 };
@@ -25,7 +25,7 @@ helpers.getStaff = function(course_id) {
     include: [{
       model: models.Course,
       where: { id: course_id },
-      through: { where: { gitlab_access_level: [20, 40, 50] } }
+      through: { where: { gitlab_access_level: [20, 40, 50] } },
     }]
   });
 };
@@ -37,7 +37,7 @@ helpers.getUsers = function(usernames) {
   // Find or Create the users, as necessary
   for (i = 0; i < usernames.length; i++) {
     users[i] = models.User.findOrCreate({
-      where: { username: usernames[i] }
+      where: { username: usernames[i] },
     });
   }
 

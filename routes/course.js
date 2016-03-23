@@ -34,7 +34,7 @@ routes.edit = function(req, res, next) {
     number: tokens[1],
     section: '',
     semester: '',
-    year: ''
+    year: '',
   };
   if (tokens.length === 4) {
     label.semester = tokens[2];
@@ -53,7 +53,7 @@ routes.edit = function(req, res, next) {
     res.render('course_edit', {
       user: req.user,
       label: label,
-      courseName: _course.name
+      courseName: _course.name,
     });
   });
 };
@@ -73,7 +73,7 @@ routes.homepage = function(req, res, next) {
       course,
       staff,
       roster,
-      assignments
+      assignments,
     ]);
   }).spread(function(_course, _staff, _roster, _assignments) {
     res.render('course', {
@@ -81,7 +81,7 @@ routes.homepage = function(req, res, next) {
       course: _course,
       staff: _staff,
       roster: _roster,
-      assignments: _assignments
+      assignments: _assignments,
     });
   });
 };
@@ -89,7 +89,7 @@ routes.homepage = function(req, res, next) {
 routes.new = function(req, res, next) {
   // app.get('/:username/course', isOwner, new);
   res.render('course_edit', {
-    user: req.user
+    user: req.user,
   });
 };
 
@@ -165,5 +165,5 @@ router.get('/staff/edit', middleware.isStaff, routes.staffEdit);
 module.exports = {
   router: router,
   createRouter: createRouter,
-  routes: routes
+  routes: routes,
 };

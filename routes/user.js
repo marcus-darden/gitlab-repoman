@@ -21,7 +21,7 @@ routes.homepage = function(req, res, next) {
     res.render('user', {
       user: req.user,
       taught: taught,
-      taken: taken
+      taken: taken,
     });
   });
 };

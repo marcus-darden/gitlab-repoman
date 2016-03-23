@@ -31,7 +31,7 @@ routes.edit = function(req, res, next) {
     res.render('assignment_edit', {
       user: req.user,
       course_label: req.params.courseLabel,
-      assignment: _assignment
+      assignment: _assignment,
     });
   });
 };
@@ -48,7 +48,7 @@ routes.homepage = function(req, res, next) {
       user: req.user,
       course_label: req.params.courseLabel,
       assignment: assignment,
-      teams: _teams
+      teams: _teams,
     });
   });
 };
@@ -57,7 +57,7 @@ routes.new = function(req, res, next) {
   // app.get('/:username/:courseLabel/assignment', isStaff, assignment.new);
   res.render('assignment_edit', {
     user: req.user,
-    course_label: req.params.courseLabel
+    course_label: req.params.courseLabel,
   });
 };
 
@@ -88,5 +88,5 @@ router.get('/edit', middleware.isStaff, routes.edit);
 module.exports = {
   router: router,
   createRouter: createRouter,
-  routes: routes
+  routes: routes,
 };

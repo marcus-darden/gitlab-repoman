@@ -62,7 +62,7 @@ helpers.delete = function(course_label, assignment_abbr) {
     where: { abbr: assignment_abbr },
     include: [{
       model: models.Course,
-      where: { label: course_label }
+      where: { label: course_label },
     }]
   });
 };
@@ -71,9 +71,9 @@ helpers.get = function(course_label, assignment_abbr) {
   return models.Assignment.findOne({
     include: [{
       model: models.Course,
-      where: { label: course_label }
+      where: { label: course_label },
     }],
-    where: { abbr: assignment_abbr }
+    where: { abbr: assignment_abbr },
   });
 };
 
@@ -82,15 +82,15 @@ helpers.getUserCourses = function(user_id) {
     include: [{
       model: models.User,
       where: { id: user_id },
-      through: { where: { gitlab_access_level: [20, 40, 50] } }
-    }]
+      through: { where: { gitlab_access_level: [20, 40, 50] } },
+    }],
   });
   var taken = models.Course.findAll({
     include: [{
       model: models.User,
       where: { id: user_id },
-      through: { where: { gitlab_access_level: 30 } }
-    }]
+      through: { where: { gitlab_access_level: 30 } },
+    }],
   });
   return models.sequelize.Promise.all([taught, taken]);
 };
@@ -102,8 +102,8 @@ helpers.update = function(course_label, assignment_abbr, form) {
     where: { abbr: assignment_abbr },
     include: [{
       model: models.Course,
-      where: { label: course_label }
-    }]
+      where: { label: course_label },
+    }],
   }).then(function(_assignment) {
     return _assignment.update(assignmentOb);
   });
