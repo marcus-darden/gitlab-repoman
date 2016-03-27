@@ -11,8 +11,8 @@ var gitlabOptions = {
   callbackURL: config.GITLAB_CALLBACK_URL,
 };
 
-var gitlabVerify = function (token, tokenSecret, profile, done) {
-  return gitlabHelper.login(profile).then(function(_user) {
+function gitlabVerify(token, tokenSecret, profile, done) {
+  return gitlabHelper.login(token, profile).then(function(_user) {
     var u = _user.get({ plain: true });
     u.oauth_token = token;
     return done(null, u);
