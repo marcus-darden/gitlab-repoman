@@ -4,13 +4,13 @@ var models = require('../models');
 
 var helpers = {};
 
-helpers.get = function(user_username) {
+helpers.get = function get(user_username) {
   return models.User.findOne({
     where: { username: user_username },
   });
 };
 
-helpers.getRoster = function(course_id) {
+helpers.getRoster = function getRoster(course_id) {
   return models.User.findAll({
     include: [{
       model: models.Course,
@@ -20,7 +20,7 @@ helpers.getRoster = function(course_id) {
   });
 };
 
-helpers.getStaff = function(course_id) {
+helpers.getStaff = function getStaff(course_id) {
   return models.User.findAll({
     include: [{
       model: models.Course,
@@ -30,7 +30,7 @@ helpers.getStaff = function(course_id) {
   });
 };
 
-helpers.getUsers = function(usernames) {
+helpers.getUsers = function getUsers(usernames) {
   var i, users = [];
   users.length = usernames.length;
 
@@ -50,7 +50,7 @@ helpers.getUsers = function(usernames) {
   });
 };
 
-helpers.login = function(profile) {
+helpers.login = function login(profile) {
   return models.User.findOrCreate({
     where: { username: profile.username },
   }).spread(function (_user, _created) {

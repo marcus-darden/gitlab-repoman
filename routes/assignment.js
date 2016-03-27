@@ -11,21 +11,21 @@ var createRouter = express.Router({ mergeParams: true });
 
 var routes = {};
 
-routes.create = function(req, res, next) {
+routes.create = function create(req, res, next) {
   // app.post('/:username/:courseLabel/assignment', isStaff, assignment.create);
   assignmentHelper.create(req.params.courseLabel, req.body).then(function(_assignment) {
     res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel + '/' + _assignment.abbr);
   });
 };
 
-routes.delete = function(req, res, next) {
-  // app.post('/:username/:courseLabel/:assignmentAbbr/delete', isStaff, assignment.delete);
-  assignmentHelper.delete(req.params.courseLabel, req.params.assignmentAbbr).then(function() {
+routes.deleteAssignment = function deleteAssignment(req, res, next) {
+  // app.post('/:username/:courseLabel/:assignmentAbbr/delete', isStaff, assignment.deleteAssignment);
+  assignmentHelper.deleteAssignment(req.params.courseLabel, req.params.assignmentAbbr).then(function() {
     res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
   });
 };
 
-routes.edit = function(req, res, next) {
+routes.edit = function edit(req, res, next) {
   // app.get('/:username/:courseLabel/:assignmentAbbr/edit', isStaff, assignment.edit);
   assignmentHelper.get(req.params.courseLabel, req.params.assignmentAbbr).then(function(_assignment) {
     res.render('assignment_edit', {
@@ -36,7 +36,7 @@ routes.edit = function(req, res, next) {
   });
 };
 
-routes.homepage = function(req, res, next) {
+routes.homepage = function homepage(req, res, next) {
   // app.get('/:username/:courseLabel/:assignmentAbbr', isAuthenticated, assignment.homepage);
   var assignment;
   assignmentHelper.get(req.params.courseLabel, req.params.assignmentAbbr).then(function(_assignment) {
@@ -53,15 +53,15 @@ routes.homepage = function(req, res, next) {
   });
 };
 
-routes.new = function(req, res, next) {
-  // app.get('/:username/:courseLabel/assignment', isStaff, assignment.new);
+routes.newAssignment = function newAssignment(req, res, next) {
+  // app.get('/:username/:courseLabel/assignment', isStaff, assignment.newAssignment);
   res.render('assignment_edit', {
     user: req.user,
     course_label: req.params.courseLabel,
   });
 };
 
-routes.update = function(req, res, next) {
+routes.update = function update(req, res, next) {
   // app.post('/:username/:courseLabel/:assignmentAbbr', isStaff, assignment.update);
   assignmentHelper.update(req.params.courseLabel,
                             req.params.assignmentAbbr,
@@ -77,12 +77,12 @@ router.use(middleware.isAuthenticated);
 createRouter.use(middleware.isStaff);
 
 // Connect the routes to handlers
-createRouter.get('/', routes.new);
+createRouter.get('/', routes.newAssignment);
 createRouter.post('/', routes.create);
 
 router.get('/', routes.homepage);
 router.post('/', middleware.isStaff, routes.update);
-router.post('/delete', middleware.isStaff, routes.delete);
+router.post('/delete', middleware.isStaff, routes.deleteAssignment);
 router.get('/edit', middleware.isStaff, routes.edit);
 
 module.exports = {

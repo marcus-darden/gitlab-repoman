@@ -12,21 +12,21 @@ var createRouter = express.Router({ mergeParams: true });
 
 var routes = {};
 
-routes.create = function(req, res, next) {
+routes.create = function create(req, res, next) {
   // app.post('/:username/course', isOwner, create);
   courseHelper.create(req.user.id, req.body).then(function(_course) {
     res.redirect(303, '/' + req.params.username + '/' + _course.label);
   });
 };
 
-routes.delete = function(req, res, next) {
-  // app.post('/:username/:courseLabel/delete', isOwner, delete);
-  courseHelper.delete(req.params.courseLabel).then(function() {
+routes.deleteCourse = function deleteCourse(req, res, next) {
+  // app.post('/:username/:courseLabel/delete', isOwner, deleteCourse);
+  courseHelper.deleteCourse(req.params.courseLabel).then(function() {
     res.redirect(303, '/' + req.params.username);
   });
 };
 
-routes.edit = function(req, res, next) {
+routes.edit = function edit(req, res, next) {
   // app.get('/:username/:courseLabel/edit', isStaff, edit);
   var tokens = req.params.courseLabel.split('-');
   var label = {
@@ -58,7 +58,7 @@ routes.edit = function(req, res, next) {
   });
 };
 
-routes.homepage = function(req, res, next) {
+routes.homepage = function homepage(req, res, next) {
   // app.get('/:username/:courseLabel', isAuthenticated, homepage);
   var course, staff, roster, assignments;
 
@@ -86,19 +86,19 @@ routes.homepage = function(req, res, next) {
   });
 };
 
-routes.new = function(req, res, next) {
-  // app.get('/:username/course', isOwner, new);
+routes.newCourse = function newCourse(req, res, next) {
+  // app.get('/:username/course', isOwner, newCourse);
   res.render('course_edit', {
     user: req.user,
   });
 };
 
-routes.rosterEdit = function(req, res, next) {
+routes.rosterEdit = function rosterEdit(req, res, next) {
   // app.get('/:username/:courseLabel/roster/edit', isStaff, rosterEdit);
   res.render('stub', req.params);
 };
 
-routes.rosterUpdate = function(req, res, next) {
+routes.rosterUpdate = function rosterUpdate(req, res, next) {
   // app.post('/:username/:courseLabel/roster', isStaff, rosterUpdate);
   var users, course;
   var uniqnames = req.body.students.trim().toLowerCase();
@@ -114,12 +114,12 @@ routes.rosterUpdate = function(req, res, next) {
   });
 };
 
-routes.staffEdit = function(req, res, next) {
+routes.staffEdit = function staffEdit(req, res, next) {
   // app.get('/:username/:courseLabel/staff/edit', isStaff, staffEdit);
   res.render('stub', req.params);
 };
 
-routes.staffUpdate = function(req, res, next) {
+routes.staffUpdate = function staffUpdate(req, res, next) {
   // app.post('/:username/:courseLabel/staff', isStaff, staffUpdate);
   var users, course;
   var uniqnames = req.body.members.trim().toLowerCase();
@@ -135,7 +135,7 @@ routes.staffUpdate = function(req, res, next) {
   });
 };
 
-routes.update = function(req, res, next) {
+routes.update = function update(req, res, next) {
   // app.post('/:username/:courseLabel', isStaff, update);
   courseHelper.update(req.params.courseLabel, req.body).then(function(_course) {
     res.redirect(303, '/' + req.params.username + '/' + _course.label);
@@ -150,12 +150,12 @@ router.use(middleware.isAuthenticated);
 createRouter.use(middleware.isOwner);
 
 // Connect the routes to handlers
-createRouter.get('/', routes.new);
+createRouter.get('/', routes.newCourse);
 createRouter.post('/', routes.create);
 
 router.get('/', routes.homepage);
 router.post('/', middleware.isStaff, routes.update);
-router.post('/delete', middleware.isOwner, routes.delete);
+router.post('/delete', middleware.isOwner, routes.deleteCourse);
 router.get('/edit', middleware.isStaff, routes.edit);
 router.post('/roster', middleware.isStaff, routes.rosterUpdate);
 router.post('/staff', middleware.isStaff, routes.staffUpdate);

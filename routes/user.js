@@ -10,7 +10,7 @@ var router = express.Router({ mergeParams: true });
 
 var routes = {};
 
-routes.homepage = function(req, res, next) {
+routes.homepage = function homepage(req, res, next) {
   // app.get('/:username', isAuthenticated, user.homepage);
   var taught, taken;
   return courseHelper.getCoursesTaught(req.user.id).then(function(_taught) {
@@ -26,12 +26,12 @@ routes.homepage = function(req, res, next) {
   });
 };
 
-routes.update = function(req, res, next) {
+routes.update = function update(req, res, next) {
   // app.post('/:username', isOwner, user.update);
   res.sendStatus(201);
 };
 
-routes.edit = function(req, res, next) {
+routes.edit = function edit(req, res, next) {
   // app.get('/:username/edit', isOwner, user.edit);
   res.sendStatus(200);
 };

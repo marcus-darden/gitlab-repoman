@@ -35,7 +35,7 @@ function getCourseObject(form) {
 
 var helpers = {};
 
-helpers.addUsers = function(course_label, users, gitlab_access_level) {
+helpers.addUsers = function addUsers(course_label, users, gitlab_access_level) {
   var course;
 
   return models.Course.findOne({
@@ -47,7 +47,7 @@ helpers.addUsers = function(course_label, users, gitlab_access_level) {
   });
 };
 
-helpers.create = function(user_id, form) {
+helpers.create = function create(user_id, form) {
   var user, course;
   var courseOb = getCourseObject(form);
 
@@ -63,19 +63,19 @@ helpers.create = function(user_id, form) {
   });
 };
 
-helpers.delete = function(course_label) {
+helpers.deleteCourse = function deleteCourse(course_label) {
   return models.Course.destroy({
     where: { label: course_label }
   });
 };
 
-helpers.get = function(course_label) {
+helpers.get = function get(course_label) {
   return models.Course.findOne({
     where: { label: course_label }
   });
 };
 
-helpers.getCoursesTaught = function(user_id) {
+helpers.getCoursesTaught = function getCoursesTaught(user_id) {
   return models.Course.findAll({
     include: [{
       model: models.User,
@@ -85,7 +85,7 @@ helpers.getCoursesTaught = function(user_id) {
   });
 };
 
-helpers.getCoursesTaken = function(user_id) {
+helpers.getCoursesTaken = function getCoursesTaken(user_id) {
   return models.Course.findAll({
     include: [{
       model: models.User,
@@ -95,7 +95,7 @@ helpers.getCoursesTaken = function(user_id) {
   });
 };
 
-helpers.isStaff = function(user_username, course_label) {
+helpers.isStaff = function isStaff(user_username, course_label) {
   return models.Course.count({
     where: { label: course_label },
     include: [{
@@ -108,7 +108,7 @@ helpers.isStaff = function(user_username, course_label) {
   });
 };
 
-helpers.removeUser = function(course_label, username) {
+helpers.removeUser = function removeUser(course_label, username) {
   var course;
 
   return models.Course.findOne({
@@ -124,7 +124,7 @@ helpers.removeUser = function(course_label, username) {
   });
 };
 
-helpers.update = function(course_label, form) {
+helpers.update = function update(course_label, form) {
   var courseOb = getCourseObject(form);
 
   return models.Course.findOne({
