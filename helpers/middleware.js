@@ -8,9 +8,8 @@ var middleware = {};
 middleware.isAuthenticated = connectEnsureLogin.ensureAuthenticated('/');
 
 middleware.isStaff = function(req, res, next) {
-  console.log('****** helpers.middleware.isStaff() ******');
   if (req.isAuthenticated()) {
-    courseHelper.isStaff(req.params.username, req.params.courseLabel).then(function(_isStaff) {
+    courseHelper.isStaff(req.user.username, req.params.courseLabel).then(function(_isStaff) {
       if (_isStaff)
         return next();
       else
