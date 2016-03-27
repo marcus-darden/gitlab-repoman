@@ -5,6 +5,7 @@ var passport = require('passport');
 var models = require('../models');
 var userHelper = require('../helpers/user');
 var courseHelper = require('../helpers/course');
+var gitlabHelper = require('../helpers/gitlab');
 var middleware = require('../helpers/middleware');
 
 var router = express.Router({ mergeParams: true });
@@ -14,8 +15,14 @@ var routes = {};
 
 routes.create = function create(req, res, next) {
   // app.post('/:username/course', isOwner, create);
+  var course;
   courseHelper.create(req.user.id, req.body).then(function(_course) {
-    res.redirect(303, '/' + req.params.username + '/' + _course.label);
+    course = _course;
+    return gitlabHelper.createGroup(req.user.oauth_token, course);
+  }).then(function(_group) {
+    return course.update({ gitlab_group_id: _group.id });
+  }).then(function() {
+    res.redirect(303, '/' + req.user.username + '/' + course.label);
   });
 };
 
@@ -100,17 +107,22 @@ routes.rosterEdit = function rosterEdit(req, res, next) {
 
 routes.rosterUpdate = function rosterUpdate(req, res, next) {
   // app.post('/:username/:courseLabel/roster', isStaff, rosterUpdate);
-  var users, course;
-  var uniqnames = req.body.students.trim().toLowerCase();
+  let users, course, promises;
+  let uniqnames = req.body.students.trim().toLowerCase();
 
   if (!uniqnames.length) {
     return;
   }
   uniqnames = uniqnames.split(/[.,;\s]+/);
-  userHelper.getUsers(uniqnames).then(function(_users) {
-    courseHelper.addUsers(req.params.courseLabel, _users, 30).then(function() {
-      res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
-    });
+
+  userHelper.getUsers(uniqnames).then(function(_dbUsers) {
+    promises = _dbUsers.map((dbUser) => gitlabHelper.setGitlabUserId(req.user.oauth_token, dbUser));
+    return Promise.all(promises);
+  }).then(function(_users) {
+    users = _users;
+    return courseHelper.addUsers(req.params.courseLabel, _users, 30);
+  }).then(function() {
+    res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
   });
 };
 
@@ -121,17 +133,30 @@ routes.staffEdit = function staffEdit(req, res, next) {
 
 routes.staffUpdate = function staffUpdate(req, res, next) {
   // app.post('/:username/:courseLabel/staff', isStaff, staffUpdate);
-  var users, course;
+  var users, course, promises;
   var uniqnames = req.body.members.trim().toLowerCase();
 
+  // Condition the usernames input
   if (!uniqnames.length) {
     return;
   }
   uniqnames = uniqnames.split(/[.,;\s]+/);
-  userHelper.getUsers(uniqnames).then(function(_users) {
-    courseHelper.addUsers(req.params.courseLabel, _users, 40).then(function() {
+
+  // This is how we update the staff
+  // 1. Find the users in the DB
+  // 2. Associate all users with course in the DB
+  // 3. Associate existing GL users with group on GL
+  userHelper.getUsers(uniqnames).then(function(_dbUsers) {
+    promises = _dbUsers.map((dbUser) => gitlabHelper.setGitlabUserId(req.user.oauth_token, dbUser));
+    return Promise.all(promises);
+  }).then(function(_users) {
+    users = _users;
+    return courseHelper.addUsers(req.params.courseLabel, _users, 40);
+  }).then(function(_course) {
+    course = _course;
+    return gitlabHelper.addGroupMembers(req.user.oauth_token, course, users);
+  }).then(function() {
       res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
-    });
   });
 };
 
