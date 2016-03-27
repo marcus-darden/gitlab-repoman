@@ -39,7 +39,7 @@ helpers.addUsers = function addUsers(course_label, users, gitlab_access_level) {
   var course;
 
   return models.Course.findOne({
-    where: { label: course_label }
+    where: { label: course_label },
   }).then(function(_course) {
     course = _course;
 
@@ -65,13 +65,13 @@ helpers.create = function create(user_id, form) {
 
 helpers.deleteCourse = function deleteCourse(course_label) {
   return models.Course.destroy({
-    where: { label: course_label }
+    where: { label: course_label },
   });
 };
 
 helpers.get = function get(course_label) {
   return models.Course.findOne({
-    where: { label: course_label }
+    where: { label: course_label },
   });
 };
 
@@ -80,8 +80,8 @@ helpers.getCoursesTaught = function getCoursesTaught(user_id) {
     include: [{
       model: models.User,
       where: { id: user_id },
-      through: { where: { gitlab_access_level: [20, 40, 50] } }
-    }]
+      through: { where: { gitlab_access_level: [20, 40, 50] } },
+    }],
   });
 };
 
@@ -90,8 +90,8 @@ helpers.getCoursesTaken = function getCoursesTaken(user_id) {
     include: [{
       model: models.User,
       where: { id: user_id },
-      through: { where: { gitlab_access_level: 30 } }
-    }]
+      through: { where: { gitlab_access_level: 30 } },
+    }],
   });
 };
 
@@ -101,8 +101,8 @@ helpers.isStaff = function isStaff(user_username, course_label) {
     include: [{
       model: models.User,
       where: { username: user_username },
-      through: { where: { gitlab_access_level: [20, 40, 50] } }
-    }]
+      through: { where: { gitlab_access_level: [20, 40, 50] } },
+    }],
   }).then(function(_count) {
     return _count !== 0;
   });
@@ -112,12 +112,12 @@ helpers.removeUser = function removeUser(course_label, username) {
   var course;
 
   return models.Course.findOne({
-    where: { label: course_label }
+    where: { label: course_label },
   }).then(function(_course) {
     course = _course;
 
     return models.User.findOne({
-      where: { username: user_username }
+      where: { username: user_username },
     });
   }).then(function(_user) {
     return course.removeUser(_user);
@@ -128,7 +128,7 @@ helpers.update = function update(course_label, form) {
   var courseOb = getCourseObject(form);
 
   return models.Course.findOne({
-    where: { label: course_label }
+    where: { label: course_label },
   }).then(function(_course) {
     return _course.update(courseOb);
   });

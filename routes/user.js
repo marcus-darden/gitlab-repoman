@@ -46,5 +46,5 @@ router.get('/edit', middleware.isOwner, routes.edit);
 
 module.exports = {
   router: router,
-  routes: routes
+  routes: routes,
 };
