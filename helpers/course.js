@@ -33,9 +33,7 @@ function getCourseObject(form) {
   return obj;
 }
 
-var helpers = {};
-
-helpers.addUsers = function addUsers(course_label, users, gitlab_access_level) {
+function addUsers(course_label, users, gitlab_access_level) {
   var course;
 
   return models.Course.findOne({
@@ -45,9 +43,9 @@ helpers.addUsers = function addUsers(course_label, users, gitlab_access_level) {
 
     return course.addUsers(users, { gitlab_access_level: gitlab_access_level });
   });
-};
+}
 
-helpers.create = function create(user_id, form) {
+function create(user_id, form) {
   var user, course;
   var courseOb = getCourseObject(form);
 
@@ -61,31 +59,21 @@ helpers.create = function create(user_id, form) {
   }).then(function() {
     return course;
   });
-};
+}
 
-helpers.deleteCourse = function deleteCourse(course_label) {
+function deleteCourse(course_label) {
   return models.Course.destroy({
     where: { label: course_label },
   });
-};
+}
 
-helpers.get = function get(course_label) {
+function get(course_label) {
   return models.Course.findOne({
     where: { label: course_label },
   });
-};
+}
 
-helpers.getCoursesTaught = function getCoursesTaught(user_id) {
-  return models.Course.findAll({
-    include: [{
-      model: models.User,
-      where: { id: user_id },
-      through: { where: { gitlab_access_level: [20, 40, 50] } },
-    }],
-  });
-};
-
-helpers.getCoursesTaken = function getCoursesTaken(user_id) {
+function getCoursesTaken(user_id) {
   return models.Course.findAll({
     include: [{
       model: models.User,
@@ -93,9 +81,19 @@ helpers.getCoursesTaken = function getCoursesTaken(user_id) {
       through: { where: { gitlab_access_level: 30 } },
     }],
   });
-};
+}
 
-helpers.isStaff = function isStaff(user_username, course_label) {
+function getCoursesTaught(user_id) {
+  return models.Course.findAll({
+    include: [{
+      model: models.User,
+      where: { id: user_id },
+      through: { where: { gitlab_access_level: [20, 40, 50] } },
+    }],
+  });
+}
+
+function isStaff(user_username, course_label) {
   return models.Course.count({
     where: { label: course_label },
     include: [{
@@ -106,9 +104,9 @@ helpers.isStaff = function isStaff(user_username, course_label) {
   }).then(function(_count) {
     return _count !== 0;
   });
-};
+}
 
-helpers.removeUser = function removeUser(course_label, username) {
+function removeUser(course_label, username) {
   var course;
 
   return models.Course.findOne({
@@ -122,9 +120,9 @@ helpers.removeUser = function removeUser(course_label, username) {
   }).then(function(_user) {
     return course.removeUser(_user);
   });
-};
+}
 
-helpers.update = function update(course_label, form) {
+function update(course_label, form) {
   var courseOb = getCourseObject(form);
 
   return models.Course.findOne({
@@ -132,6 +130,16 @@ helpers.update = function update(course_label, form) {
   }).then(function(_course) {
     return _course.update(courseOb);
   });
-};
+}
 
-module.exports = helpers;
+module.exports = {
+  addUsers,
+  create,
+  deleteCourse,
+  getCoursesTaken,
+  getCoursesTaught,
+  isStaff,
+  removeUser,
+  update,
+  get: get,
+};

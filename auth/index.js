@@ -5,13 +5,13 @@ var path = require('path');
 var passport = require('passport');
 var models = require('../models');
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function serializeUser(user, done) {
   var session_user = { id: user.id,
                        oauth_token: user.oauth_token };
   done(null, session_user);
 });
 
-passport.deserializeUser(function(session_user, done) {
+passport.deserializeUser(function deserializeUser(session_user, done) {
   models.User.findById(session_user.id).then(function(user) {
     var u = user.get({ plain: true });
     u.oauth_token = session_user.oauth_token;

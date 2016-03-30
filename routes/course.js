@@ -8,12 +8,7 @@ var courseHelper = require('../helpers/course');
 var gitlabHelper = require('../helpers/gitlab');
 var middleware = require('../helpers/middleware');
 
-var router = express.Router({ mergeParams: true });
-var createRouter = express.Router({ mergeParams: true });
-
-var routes = {};
-
-routes.create = function create(req, res, next) {
+function create(req, res, next) {
   // app.post('/:username/course', isOwner, create);
   var course;
   courseHelper.create(req.user.id, req.body).then(function(_course) {
@@ -24,16 +19,16 @@ routes.create = function create(req, res, next) {
   }).then(function() {
     res.redirect(303, '/' + req.user.username + '/' + course.label);
   });
-};
+}
 
-routes.deleteCourse = function deleteCourse(req, res, next) {
+function deleteCourse(req, res, next) {
   // app.post('/:username/:courseLabel/delete', isOwner, deleteCourse);
   courseHelper.deleteCourse(req.params.courseLabel).then(function() {
     res.redirect(303, '/' + req.params.username);
   });
-};
+}
 
-routes.edit = function edit(req, res, next) {
+function edit(req, res, next) {
   // app.get('/:username/:courseLabel/edit', isStaff, edit);
   var tokens = req.params.courseLabel.split('-');
   var label = {
@@ -63,9 +58,9 @@ routes.edit = function edit(req, res, next) {
       courseName: _course.name,
     });
   });
-};
+}
 
-routes.homepage = function homepage(req, res, next) {
+function homepage(req, res, next) {
   // app.get('/:username/:courseLabel', isAuthenticated, homepage);
   var course, staff, roster, assignments;
 
@@ -91,21 +86,21 @@ routes.homepage = function homepage(req, res, next) {
       assignments: _assignments,
     });
   });
-};
+}
 
-routes.newCourse = function newCourse(req, res, next) {
+function newCourse(req, res, next) {
   // app.get('/:username/course', isOwner, newCourse);
   res.render('course_edit', {
     user: req.user,
   });
-};
+}
 
-routes.rosterEdit = function rosterEdit(req, res, next) {
+function rosterEdit(req, res, next) {
   // app.get('/:username/:courseLabel/roster/edit', isStaff, rosterEdit);
   res.render('stub', req.params);
-};
+}
 
-routes.rosterUpdate = function rosterUpdate(req, res, next) {
+function rosterUpdate(req, res, next) {
   // app.post('/:username/:courseLabel/roster', isStaff, rosterUpdate);
   let users, course, promises;
   let uniqnames = req.body.students.trim().toLowerCase();
@@ -124,14 +119,14 @@ routes.rosterUpdate = function rosterUpdate(req, res, next) {
   }).then(function() {
     res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
   });
-};
+}
 
-routes.staffEdit = function staffEdit(req, res, next) {
+function staffEdit(req, res, next) {
   // app.get('/:username/:courseLabel/staff/edit', isStaff, staffEdit);
   res.render('stub', req.params);
-};
+}
 
-routes.staffUpdate = function staffUpdate(req, res, next) {
+function staffUpdate(req, res, next) {
   // app.post('/:username/:courseLabel/staff', isStaff, staffUpdate);
   var users, course, promises;
   var uniqnames = req.body.members.trim().toLowerCase();
@@ -158,37 +153,50 @@ routes.staffUpdate = function staffUpdate(req, res, next) {
   }).then(function() {
       res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
   });
-};
+}
 
-routes.update = function update(req, res, next) {
+function update(req, res, next) {
   // app.post('/:username/:courseLabel', isStaff, update);
   courseHelper.update(req.params.courseLabel, req.body).then(function(_course) {
     res.redirect(303, '/' + req.params.username + '/' + _course.label);
   });
-};
-
-
-// Protect these routes behind authentication
-// mount at /:username/:courseLabel
-router.use(middleware.isAuthenticated);
-// mount at /:username/course
-createRouter.use(middleware.isOwner);
+}
 
 // Connect the routes to handlers
-createRouter.get('/', routes.newCourse);
-createRouter.post('/', routes.create);
+// Protect these routes behind ownership
+// mount at /:username/course
+var createRouter = express.Router({ mergeParams: true });
+createRouter.use(middleware.isOwner);
+createRouter.get('/', newCourse);
+createRouter.post('/', create);
 
-router.get('/', routes.homepage);
-router.post('/', middleware.isStaff, routes.update);
-router.post('/delete', middleware.isOwner, routes.deleteCourse);
-router.get('/edit', middleware.isStaff, routes.edit);
-router.post('/roster', middleware.isStaff, routes.rosterUpdate);
-router.post('/staff', middleware.isStaff, routes.staffUpdate);
-router.get('/roster/edit', middleware.isStaff, routes.rosterEdit);
-router.get('/staff/edit', middleware.isStaff, routes.staffEdit);
+// Connect the routes to handlers
+// Protect these routes behind authentication
+// mount at /:username/:courseLabel
+var router = express.Router({ mergeParams: true });
+router.use(middleware.isAuthenticated);
+router.get('/', homepage);
+router.post('/', middleware.isStaff, update);
+router.post('/delete', middleware.isOwner, deleteCourse);
+router.get('/edit', middleware.isStaff, edit);
+router.post('/roster', middleware.isStaff, rosterUpdate);
+router.post('/staff', middleware.isStaff, staffUpdate);
+router.get('/roster/edit', middleware.isStaff, rosterEdit);
+router.get('/staff/edit', middleware.isStaff, staffEdit);
 
 module.exports = {
-  router: router,
-  createRouter: createRouter,
-  routes: routes,
+  createRouter,
+  router,
+  routes: {
+    create,
+    deleteCourse,
+    edit,
+    homepage,
+    newCourse,
+    rosterEdit,
+    rosterUpdate,
+    staffEdit,
+    staffUpdate,
+    update,
+  },
 };

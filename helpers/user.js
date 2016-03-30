@@ -2,15 +2,13 @@
 
 var models = require('../models');
 
-var helpers = {};
-
-helpers.get = function get(user_username) {
+function get(user_username) {
   return models.User.findOne({
     where: { username: user_username },
   });
-};
+}
 
-helpers.getRoster = function getRoster(course_id) {
+function getRoster(course_id) {
   return models.User.findAll({
     include: [{
       model: models.Course,
@@ -18,9 +16,9 @@ helpers.getRoster = function getRoster(course_id) {
       through: { where: { gitlab_access_level: 30 } },
     }]
   });
-};
+}
 
-helpers.getStaff = function getStaff(course_id) {
+function getStaff(course_id) {
   return models.User.findAll({
     include: [{
       model: models.Course,
@@ -28,9 +26,9 @@ helpers.getStaff = function getStaff(course_id) {
       through: { where: { gitlab_access_level: [20, 40, 50] } },
     }]
   });
-};
+}
 
-helpers.getUsers = function getUsers(usernames) {
+function getUsers(usernames) {
   var i, users = [];
   users.length = usernames.length;
 
@@ -48,9 +46,9 @@ helpers.getUsers = function getUsers(usernames) {
     }
     return users;
   });
-};
+}
 
-helpers.login = function login(profile) {
+function login(profile) {
   return models.User.findOrCreate({
     where: { username: profile.username },
   }).spread(function (_user, _created) {
@@ -61,6 +59,12 @@ helpers.login = function login(profile) {
       gitlab_user_id: profile.id,  // Maybe first time only
     });
   });
-};
+}
 
-module.exports = helpers;
+module.exports = {
+  getRoster,
+  getStaff,
+  getUsers,
+  login,
+  get: get,
+};

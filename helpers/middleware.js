@@ -3,11 +3,7 @@ var models = require('../models');
 var courseHelper = require('./course');
 var connectEnsureLogin = require('connect-ensure-login');
 
-var middleware = {};
-
-middleware.isAuthenticated = connectEnsureLogin.ensureAuthenticated('/');
-
-middleware.isStaff = function(req, res, next) {
+function isStaff(req, res, next) {
   if (req.isAuthenticated()) {
     courseHelper.isStaff(req.user.username, req.params.courseLabel).then(function(_isStaff) {
       if (_isStaff)
@@ -18,13 +14,16 @@ middleware.isStaff = function(req, res, next) {
   }
   else
     res.redirect(303, '/' + req.params.username);
-};
+}
 
-middleware.isOwner = function(req, res, next) {
-  console.log('****** helpers.middleware.isOwner() ******');
+function isOwner(req, res, next) {
   if (req.isAuthenticated() && req.user && req.user.username === req.params.username)
     return next();
   res.redirect(303, req.user ? '/' + req.user.username : '/');
-};
+}
 
-module.exports = middleware;
+module.exports = {
+  isStaff,
+  isOwner,
+  isAuthenticated: connectEnsureLogin.ensureAuthenticated('/'),
+};

@@ -31,14 +31,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-//var routes = require('./routes');
-//routes.init(app);
 app.use(require('./routes/root'));
-app.use('/auth', require('./routes/auth'));
-//app.use(/^\/([^\/]+?)(?:\/(?=$))?$/i, require('./routes/user').router);
-//app.use('/:username', require('./routes/user').router);
-//app.use(require('./routes/course').router);
-//app.use(require('./routes/assignment').router);
+app.use('/auth', require('./routes/auth').router);
 //app.use('/h/:hashid', require('./routes/hashid').router);
 app.use('/:username', require('./routes/user').router);
 app.use('/:username/course', require('./routes/course').createRouter);

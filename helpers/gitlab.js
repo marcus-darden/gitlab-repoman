@@ -25,16 +25,11 @@ function promisify(fun, args, self) {
   });
 }
 
-const helpers = {};
-
-helpers.addGroupMembers = function addGroupMembers(token, course, users) {
-  // 3. Associate existing GL users with group on GL
+function addGroupMembers(token, course, users) {
   const api = getAPI(token);
   const access_level = api.groups.access_levels['MASTER'];
   const promises = [];
 
-  // TODO: find all active users on GL, update DB with GL-id & avatar
-  //       then add to GL group.
   const verified = users.filter((user) => user.gitlab_user_id !== 0);
 
   // Add verified users (already logged into GL) to the group and return
@@ -45,17 +40,17 @@ helpers.addGroupMembers = function addGroupMembers(token, course, users) {
   });
 
   return Promise.all(promises);
-};
+}
 
-helpers.createGroup = function createGroup(token, course) {
+function createGroup(token, course) {
   return promisify(getAPI(token).groups.create, [{
     name: course.label,
     path: course.label,
     description: course.name,
   }]);
-};
+}
 
-helpers.login = function login(token, profile) {
+function login(token, profile) {
   // Condition profile to provide the following (default in gitlab)
   // {
   //   username,
@@ -66,7 +61,7 @@ helpers.login = function login(token, profile) {
   return userHelper.login(profile).then(function(_dbUser) {
     return setGitlabUserId(token, _dbUser);
   });
-};
+}
 
 function setGitlabUserId(token, dbUser) {
   let glUsers;
@@ -84,6 +79,10 @@ function setGitlabUserId(token, dbUser) {
     });
   });
 }
-helpers.setGitlabUserId = setGitlabUserId;
 
-module.exports = helpers;
+module.exports = {
+  addGroupMembers,
+  createGroup,
+  login,
+  setGitlabUserId,
+};

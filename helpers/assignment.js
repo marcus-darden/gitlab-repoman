@@ -40,7 +40,7 @@ function getAssignmentObject(form) {
 
 var helpers = {};
 
-helpers.create = function create(course_label, form) {
+function create(course_label, form) {
   var course, assignment;
   var assignmentOb = getAssignmentObject(form);
 
@@ -55,9 +55,9 @@ helpers.create = function create(course_label, form) {
   }).then(function() {
     return assignment;
   });
-};
+}
 
-helpers.deleteAssignment = function deleteAssignment(course_label, assignment_abbr) {
+function deleteAssignment(course_label, assignment_abbr) {
   return models.Assignment.destroy({
     where: { abbr: assignment_abbr },
     include: [{
@@ -65,9 +65,9 @@ helpers.deleteAssignment = function deleteAssignment(course_label, assignment_ab
       where: { label: course_label },
     }]
   });
-};
+}
 
-helpers.get = function get(course_label, assignment_abbr) {
+function get(course_label, assignment_abbr) {
   return models.Assignment.findOne({
     include: [{
       model: models.Course,
@@ -75,9 +75,9 @@ helpers.get = function get(course_label, assignment_abbr) {
     }],
     where: { abbr: assignment_abbr },
   });
-};
+}
 
-helpers.getUserCourses = function getUserCourses(user_id) {
+function getUserCourses(user_id) {
   var taught = models.Course.findAll({
     include: [{
       model: models.User,
@@ -93,9 +93,9 @@ helpers.getUserCourses = function getUserCourses(user_id) {
     }],
   });
   return models.sequelize.Promise.all([taught, taken]);
-};
+}
 
-helpers.update = function update(course_label, assignment_abbr, form) {
+function update(course_label, assignment_abbr, form) {
   var assignmentOb = getAssignmentObject(form);
 
   return models.Assignment.findOne({
@@ -107,6 +107,12 @@ helpers.update = function update(course_label, assignment_abbr, form) {
   }).then(function(_assignment) {
     return _assignment.update(assignmentOb);
   });
-};
+}
 
-module.exports = helpers;
+module.exports = {
+  create,
+  deleteAssignment,
+  getUserCourses,
+  update,
+  get: get,
+};
