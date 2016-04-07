@@ -1,99 +1,99 @@
-'use strict';
+const express = require('express');
+const error = require('../helpers/error');
+const middleware = require('../helpers/middleware');
+const assignmentHelper = require('../helpers/assignment');
 
-var express = require('express');
-var passport = require('passport');
-var models = require('../models');
-var assignmentHelper = require('../helpers/assignment');
-var middleware = require('../helpers/middleware');
-
-var routes = {};
-
-function create(req, res, next) {
-  // app.post('/:username/:courseLabel/assignment', isStaff, assignment.create);
-  assignmentHelper.create(req.params.courseLabel, req.body).then(function(_assignment) {
-    res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel + '/' + _assignment.abbr);
-  });
+const createRouter = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true });
+const routes = {};
+module.exports = {
+  createRouter,
+  router,
+  routes,
 };
 
-function deleteAssignment(req, res, next) {
-  // app.post('/:username/:courseLabel/:assignmentAbbr/delete', isStaff, assignment.deleteAssignment);
-  assignmentHelper.deleteAssignment(req.params.courseLabel, req.params.assignmentAbbr).then(function() {
-    res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel);
-  });
+routes.create = function create(req, res, next) {
+  // app.post('/:username/:courseLabel/assignment', isStaff, create);
+  assignmentHelper.create(req.params.courseLabel, req.body).then((_assignment) => {
+    res.redirect(303, `/${req.params.username}/${req.params.courseLabel}/${_assignment.abbr}`);
+  }).catch(error.handler(next, 'Could not create assignment.'));
 };
 
-function edit(req, res, next) {
-  // app.get('/:username/:courseLabel/:assignmentAbbr/edit', isStaff, assignment.edit);
-  assignmentHelper.get(req.params.courseLabel, req.params.assignmentAbbr).then(function(_assignment) {
+routes.deleteAssignment = function deleteAssignment(req, res, next) {
+  // app.post('/:username/:courseLabel/:assignmentAbbr/delete', isStaff, deleteAssignment);
+  assignmentHelper.deleteAssignment(
+    req.params.courseLabel,
+    req.params.assignmentAbbr
+  ).then(() => {
+    res.redirect(303, `/${req.params.username}/${req.params.courseLabel}`);
+  }).catch(error.handler(next, 'Could not delete assignment.'));
+};
+
+routes.edit = function edit(req, res, next) {
+  // app.get('/:username/:courseLabel/:assignmentAbbr/edit', isStaff, edit);
+  assignmentHelper.get(
+    req.params.courseLabel,
+    req.params.assignmentAbbr
+  ).then((_assignment) => {
     res.render('assignment_edit', {
       user: req.user,
       course_label: req.params.courseLabel,
       assignment: _assignment,
     });
-  });
+  }).catch(error.handler(next, 'Could not edit assignment.'));
 };
 
-function homepage(req, res, next) {
-  // app.get('/:username/:courseLabel/:assignmentAbbr', isAuthenticated, assignment.homepage);
-  var assignment;
-  assignmentHelper.get(req.params.courseLabel, req.params.assignmentAbbr).then(function(_assignment) {
+routes.homepage = function homepage(req, res, next) {
+  // app.get('/:username/:courseLabel/:assignmentAbbr', isAuthenticated, homepage);
+  let assignment;
+  assignmentHelper.get(
+    req.params.courseLabel,
+    req.params.assignmentAbbr
+  ).then((_assignment) => {
     assignment = _assignment;
-
     return assignment.getTeams();
-  }).then(function(_teams) {
+  }).then((_teams) => {
     res.render('assignment', {
+      assignment,
       user: req.user,
       course_label: req.params.courseLabel,
-      assignment: assignment,
       teams: _teams,
     });
-  });
+  }).catch(error.handler(next, 'Could not show assignment.'));
 };
 
-function newAssignment(req, res, next) {
-  // app.get('/:username/:courseLabel/assignment', isStaff, assignment.newAssignment);
+// TODO: no next
+routes.newAssignment = function newAssignment(req, res) {
+  // app.get('/:username/:courseLabel/assignment', isStaff, newAssignment);
   res.render('assignment_edit', {
     user: req.user,
     course_label: req.params.courseLabel,
   });
 };
 
-function update(req, res, next) {
-  // app.post('/:username/:courseLabel/:assignmentAbbr', isStaff, assignment.update);
-  assignmentHelper.update(req.params.courseLabel,
-                            req.params.assignmentAbbr,
-                            req.body).then(function(_assignment) {
-    res.redirect(303, '/' + req.params.username + '/' + req.params.courseLabel + '/' + _assignment.abbr);
-  });
+routes.update = function update(req, res, next) {
+  // app.post('/:username/:courseLabel/:assignmentAbbr', isStaff, update);
+  assignmentHelper.update(
+    req.params.courseLabel,
+    req.params.assignmentAbbr,
+    req.body
+  ).then((_assignment) => {
+    res.redirect(303, `/${req.params.username}/${req.params.courseLabel}/${_assignment.abbr}`);
+  }).catch(error.handler(next, 'Could not update assignment.'));
 };
 
 // Connect the routes to handlers
 // Protect these routes behind staff membership
 // mount at /:username/:courseLabel/assignment
-var createRouter = express.Router({ mergeParams: true });
 createRouter.use(middleware.isStaff);
-createRouter.get('/', newAssignment);
-createRouter.post('/', create);
+createRouter.get('/', routes.newAssignment);
+createRouter.post('/', routes.create);
 
 // Connect the routes to handlers
 // Protect these routes behind authentication
 // mount at /:username/:courseLabel/:assignmentAbbr
-var router = express.Router({ mergeParams: true });
 router.use(middleware.isAuthenticated);
-router.get('/', homepage);
-router.post('/', middleware.isStaff, update);
-router.post('/delete', middleware.isStaff, deleteAssignment);
-router.get('/edit', middleware.isStaff, edit);
-
-module.exports = {
-  createRouter,
-  router,
-  routes: {
-    create,
-    deleteAssignment,
-    edit,
-    homepage,
-    newAssignment,
-    update,
-  },
-};
+router.get('/', routes.homepage);
+router.post('/', middleware.isStaff, routes.update);
+router.post('/delete', middleware.isStaff, routes.deleteAssignment);
+router.get('/edit', middleware.isStaff, routes.edit);

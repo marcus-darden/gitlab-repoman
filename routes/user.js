@@ -1,51 +1,33 @@
-'use strict';
+const express = require('express');
+const error = require('../helpers/error');
+const middleware = require('../helpers/middleware');
+const courseHelper = require('../helpers/course');
 
-var express = require('express');
-var passport = require('passport');
-var models = require('../models');
-var courseHelper = require('../helpers/course');
-var middleware = require('../helpers/middleware');
+const router = express.Router({ mergeParams: true });
+const routes = {};
+module.exports = {
+  router,
+  routes,
+};
 
-function homepage(req, res, next) {
+routes.homepage = function homepage(req, res, next) {
   // app.get('/:username', user.homepage);
-  var taught, taken;
-  return courseHelper.getCoursesTaught(req.user.id).then(function(_taught) {
-    taught = _taught;
-    return courseHelper.getCoursesTaken(req.user.id);
-  }).then(function(_taken) {
+  let taken;
+
+  courseHelper.getCoursesTaken(req.user.id).then((_taken) => {
     taken = _taken;
+    return courseHelper.getCoursesTaught(req.user.id);
+  }).then((_taught) => {
     res.render('user', {
+      taken,
+      taught: _taught,
       user: req.user,
-      taught: taught,
-      taken: taken,
     });
-  });
-}
-
-function update(req, res, next) {
-  // app.post('/:username', isOwner, user.update);
-  res.sendStatus(201);
-}
-
-function edit(req, res, next) {
-  // app.get('/:username/edit', isOwner, user.edit);
-  res.sendStatus(200);
-}
+  }).catch(error.handler(next, 'Could not show user.'));
+};
 
 // Connect the routes to handlers
 // Protect these routes behind authentication
 // mount at /:username
-var router = express.Router({ mergeParams: true });
 router.use(middleware.isAuthenticated);
-router.get('/', homepage);
-router.post('/', middleware.isOwner, update);
-router.get('/edit', middleware.isOwner, edit);
-
-module.exports = {
-  router: router,
-  routes: {
-    edit,
-    homepage,
-    update,
-  },
-};
+router.get('/', routes.homepage);

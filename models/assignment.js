@@ -1,6 +1,5 @@
-'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var Assignment = sequelize.define('assignment', {
+module.exports = function defineAssignmentModel(Sequelize, DataTypes) {
+  const Assignment = Sequelize.define('assignment', {
     name: DataTypes.STRING,
     abbr: DataTypes.STRING,
     description: DataTypes.STRING,
@@ -9,24 +8,24 @@ module.exports = function(sequelize, DataTypes) {
     max_team_size: DataTypes.INTEGER,
     create_teams: {
       defaultValue: 'solo',
-      type: DataTypes.ENUM('manual', 'random', 'solo', 'optin')
+      type: DataTypes.ENUM('manual', 'random', 'solo', 'optin'),
     },
     active: {
       defaultValue: false,
-      type: DataTypes.BOOLEAN
-    }
+      type: DataTypes.BOOLEAN,
+    },
   }, {
     classMethods: {
-      associate: function(models) {
+      associate(models) {
         Assignment.belongsToMany(models.Team, {
           onDelete: 'restrict',
-          through: 'assignment_team'
+          through: 'assignment_team',
         });
         Assignment.belongsTo(models.Course, {
-          onDelete: 'cascade'
+          onDelete: 'cascade',
         });
-      }
-    }
+      },
+    },
   });
   return Assignment;
 };

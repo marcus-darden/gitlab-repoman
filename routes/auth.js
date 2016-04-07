@@ -1,19 +1,19 @@
-'use strict';
-
-var express = require('express');
-var passport = require('passport');
-var router  = express.Router();
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
 
 function logAll(req, res, next) {
   console.log('%s %s %s', req.method, req.url, req.path);
   next();
 }
 
-function login(req, res, next) {
+// TODO: Is it cool to fly with no next() here?
+function login(req, res) {
   res.render('login', { user: req.user });
 }
 
-function logout(req, res, next) {
+// TODO: Is it cool to fly with no next() here?
+function logout(req, res) {
   req.logout();
   res.redirect('/');
 }
@@ -26,8 +26,9 @@ function authSuccess(req, res, next) {
   passport.authenticate(req.params.strategy, { failureRedirect: '/' })(req, res, next);
 }
 
-function authFailure(req, res, next) {
-  res.redirect('/' + req.user.username);
+// TODO: Is it cool to fly with no next() here?
+function authFailure(req, res) {
+  res.redirect(`/${req.user.username}`);
 }
 
 // TODO - this looks like debug, remove it later

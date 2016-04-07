@@ -28,6 +28,7 @@ block main
           li
             team.name
     when 'random'
+      a.btn.btn-default(href='/#{user.username}/#{course_label}/#{assignment.abbr}/create_random', data-method='post') create teams
       h3 Team Repos(#{teams.length})
       ul
         each team in teams

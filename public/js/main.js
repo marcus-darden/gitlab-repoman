@@ -1,108 +1,102 @@
-$(document).ready(function() {
+$(document).ready(() => {
+  function updateBtns(btns) {
+    const key = btns || $('input[name=\'team_id\']').val();
+    $('.edit_team').attr('href', `/team/${key}`);
+    $('.leave_team').attr('href', `/team/${key}/quit`);
+  }
 
+  function resetUI() {
+    if ($('input[name=\'team_id\']').val()) {
+      updateBtns();
+      $('.new_team').hide();
+      $('.edit_team').show();
+      $('.leave_team').show();
+      $('input[name=\'team_id\']').attr('readonly', 'readonly');
+      $('.message').html('Share this key with group members.');
+    }
+    else {
+      $('.edit_team').hide();
+      $('.leave_team').hide();
+    }
+  }
 
-	$(".new_team").click(function() {
+  function saveUserInfo(e) {
+    if (e) e.preventDefault();
 
-		var key = Math.random().toString(36).substring(7);
-		$.post("/key", { key: key }, function(data) {
-            //console.log('Pre-key: ' + key);
-			$("input[name='team_id']").val(key);
-            //console.log('Input-key: ' + $("input[name='team_id']").val());
-			updateBtns(key);
-			console.log(data);
-			saveUserInfo(null);
-		})
-	})
+    const obj = {
+      username: $('input[name=\'uniqname\']').val(),
+      team_id: $('input[name=\'team_id\']').val(),
+    };
 
-	function updateBtns(key) {
-		if(!key) key = $("input[name='team_id']").val();
-		$(".edit_team").attr("href","/team/"+key)
-		$(".leave_team").attr("href","/team/"+key+"/quit")
-	}
-	
-	function saveUserInfo(e) {
-		if(e) e.preventDefault();
+    $.ajax({
+      url: '/user',
+      type: 'POST',
+      data: JSON.stringify(obj),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      success(data) {
+        console.log(data);
 
-		var obj = {
-			username: $("input[name='uniqname']").val(),
-			team_id: $("input[name='team_id']").val()
-		}
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
 
-		$.ajax({
-		    url: '/user',
-		    type: 'POST',
-		    data: JSON.stringify(obj),
-		    headers: {
-		    	"Content-Type":"application/json"
-		    },
-		    dataType: 'json',
-		    success: function (data) {
-		    	console.log(data);
+        const oldText = $('#save').html();
+        $('#save').html('Saved!');
+        resetUI();
+        setTimeout(() => $('#save').html(oldText), 2000);
+      },
+      error(data) {
+        console.log(data);
+        alert(`Something is wrong!\nBother Otto and give him this: \n\n${data}`);
+      },
+    });
+  }
 
-		    	if(data.error) {
-		    		alert(data.error)
-		    		return;
-		    	}
+  $('.new_team').click(() => {
+    const key = Math.random().toString(36).substring(7);
+    $.post('/key', { key }, (data) => {
+            // console.log('Pre-key: ' + key);
+      $('input[name=\'team_id\']').val(key);
+            // console.log('Input-key: ' + $('input[name='team_id']').val());
+      updateBtns(key);
+      console.log(data);
+      saveUserInfo(null);
+    });
+  });
 
-		    	var oldText = $("#save").html()
-		    	$("#save").html("Saved!")
-		        resetUI();
-		    	setTimeout(function() {
-		    		$("#save").html(oldText)
-		    	}, 2000)
-		    },
-		    error: function(data) {
-		    	console.log(data);
-		    	alert("Something is wrong!\nBother Otto and give him this: \n\n" + data)
-		    }
-		});
-	}
+  if (window.location.pathname === '/user') {
+    resetUI();
+  }
 
-	function resetUI() {
-		if($("input[name='team_id']").val()) {
-			updateBtns()
-			$(".new_team").hide();
-			$(".edit_team").show();
-			$(".leave_team").show();
-			$("input[name='team_id']").attr("readonly","readonly")
-			$(".message").html("Share this key with group members.")
-		} else {
-			$(".edit_team").hide();
-			$(".leave_team").hide();
-		}
-	}
+  $('#user_signup').submit(saveUserInfo);
 
-	if(window.location.pathname == "/user") {
-		resetUI();
-	}
+  $('#team_edit').submit((e) => {
+    e.preventDefault();
 
-	$("#user_signup").submit(saveUserInfo);
+    const obj = {
+      name: $('input[name=\'name\']').val(),
+    };
 
-	$("#team_edit").submit(function(e) {
-		e.preventDefault();
-
-		var obj = {
-			name: $("input[name='name']").val()
-		}
-
-		console.log(obj);
-		$.ajax({
-		    url: '/team/'+$("input[name='id']").val(),
-		    type: 'POST',
-		    data: JSON.stringify(obj),
-		    headers: {
-		    	"Content-Type":"application/json"
-		    },
-		    dataType: 'json',
-		    success: function (data) {
-		        console.info(data);
-		    }
-		});
-	})
-
-
+    console.log(obj);
+    $.ajax({
+      url: `/team/${$('input[name=\'id\']').val()}`,
+      type: 'POST',
+      data: JSON.stringify(obj),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      success(data) {
+        console.info(data);
+      },
+    });
+  });
 });
 
 function getByName(name, i) {
-	return $($("input[name='"+name+"']")[i]).val();
+  return $($(`input[name=\'${name}\']`)[i]).val();
 }

@@ -45,6 +45,8 @@
   "devDependencies": {
     "cli-gitlab": "^1.2.1",
     "eslint": "^2.4.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-react": "^4.2.3",
     "path-to-regexp": "^1.2.1"
   }
 }

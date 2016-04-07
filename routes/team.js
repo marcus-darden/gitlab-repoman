@@ -1,20 +1,33 @@
-var models = require('../models');
+const express = require('express');
+const middleware = require('../helpers/middleware');
 
-var teamModule = {
-    homepage: function(req, res, next) {
-      // app.get('/:username/:courseLabel/:assignmentLabel/team', isAuthenticated, team.homepage);
-      res.render('stub', req.params);
-    },
-
-    update: function(req, res, next) {
-      // app.post('/:username/:courseLabel/:assignmentLabel/team', isStaff, team.update);
-      res.render('stub', req.params);
-    },
-
-    edit: function(req, res, next) {
-      // app.get('/:username/:courseLabel/:assignmentLabel/team/edit', isAuthenticated, team.edit);
-      res.render('stub', req.params);
-    },
+const routes = {};
+const router = express.Router({ mergeParams: true });
+module.exports = {
+  router,
+  routes,
 };
 
-module.exports = teamModule;
+routes.homepage = function homepage(req, res, next) {
+  // app.get('/:username/:courseLabel/:assignmentAbbr/team', isAuthenticated, team.homepage);
+  res.render('stub', req.params);
+};
+
+routes.update = function update(req, res, next) {
+  // app.post('/:username/:courseLabel/:assignmentAbbr/team', isStaff, team.update);
+  res.render('stub', req.params);
+};
+
+routes.edit = function edit(req, res, next) {
+  // app.get('/:username/:courseLabel/:assignmentAbbr/team/edit', isAuthenticated, team.edit);
+  res.render('stub', req.params);
+};
+
+// Connect the routes to handlers
+// Protect these routes behind authentication
+// mount at /:username/:courseLabel/:assignmentAbbr
+// TODO: Fix the middleware here...
+router.use(middleware.isAuthenticated);
+router.get('/team', routes.homepage);
+router.post('/team', middleware.isStaff, routes.update);
+router.get('/team/edit', middleware.isStaff, routes.edit);

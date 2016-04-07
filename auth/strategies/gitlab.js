@@ -1,10 +1,9 @@
-'use strict';
+const GitlabStrategy = require('passport-gitlab').Strategy;
+const config = require('../../config');
+const error = require('../../helpers/error');
+const gitlabHelper = require('../../helpers/gitlab');
 
-var GitlabStrategy = require('passport-gitlab').Strategy;
-var config = require('../../config');
-var gitlabHelper = require('../../helpers/gitlab');
-
-var gitlabOptions = {
+const gitlabOptions = {
   clientID: config.GITLAB_APP_KEY,
   clientSecret: config.GITLAB_APP_SECRET,
   gitlabURL: config.GITLAB_URL,
@@ -12,14 +11,12 @@ var gitlabOptions = {
 };
 
 function gitlabVerify(token, tokenSecret, profile, done) {
-  return gitlabHelper.login(token, profile).then(function(_user) {
-    var u = _user.get({ plain: true });
+  return gitlabHelper.login(token, profile).then((_user) => {
+    const u = _user.get();
     u.oauth_token = token;
-    console.log('OAUTH_TOKEN: ' + token);
+    console.log(`OAUTH_TOKEN: ${token}`);
     return done(null, u);
-  }).catch(function(_err) {
-    return done(_err, null);
-  });
-};
+  }).catch(error.helper(done, 'Unable to log in to Gitlab server.'));
+}
 
 module.exports = new GitlabStrategy(gitlabOptions, gitlabVerify);

@@ -1,36 +1,30 @@
-'use strict';
+const fs = require('fs');
+const path = require('path');
+const passport = require('passport');
+const models = require('../models');
+const error = require('../helpers/error');
 
-var fs = require('fs');
-var path = require('path');
-var passport = require('passport');
-var models = require('../models');
-
-passport.serializeUser(function serializeUser(user, done) {
-  var session_user = { id: user.id,
-                       oauth_token: user.oauth_token };
-  done(null, session_user);
-});
-
-passport.deserializeUser(function deserializeUser(session_user, done) {
-  models.User.findById(session_user.id).then(function(user) {
-    var u = user.get({ plain: true });
-    u.oauth_token = session_user.oauth_token;
-    done(null, u);
-  }).catch(function(err) {
-    console.log(err);
-    done(new Error('User id ' + id + ' does not exist'));
+passport.serializeUser((user, done) => {
+  done(null, {
+    id: user.id,
+    oauth_token: user.oauth_token,
   });
 });
 
+passport.deserializeUser((sessionUser, done) => {
+  models.User.findById(sessionUser.id).then((_user) => {
+    const u = _user.get();
+    u.oauth_token = sessionUser.oauth_token;
+    done(null, u);
+  }).catch(error.handler(done, 'User id does not exist'));
+});
 
 fs
   .readdirSync(path.join(__dirname, 'strategies'))
-  .filter(function (file) {
-    return file.indexOf('.') !== 0 && file.substr(-3) === '.js';
-  })
-  .forEach(function (file) {
-    var name = file.substring(0, file.length - 3);  // remove extension
-    passport.use(name, require(path.join(__dirname, 'strategies', file)));
+  .filter(file => file.indexOf('.') !== 0 && file.substr(-3) === '.js')
+  .forEach((basename) => {
+    const filename = basename.substring(0, basename.length - 3);
+    passport.use(filename, require(path.join(__dirname, 'strategies', basename)));
   });
 
 module.exports = passport;

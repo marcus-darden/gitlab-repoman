@@ -1,145 +1,122 @@
-'use strict';
+const models = require('../models');
 
-var models = require('../models');
+const helpers = module.exports = {};
 
 function getCourseObject(form) {
   // Get Form Data
-  var obj = { name: form.name };
+  const obj = { name: form.name };
 
   // Clean course number
-  var number = form.department.toLowerCase().replace(' ', '')
-               + '-' + form.number.toLowerCase().replace(' ', '');
-  if (form.section.length)
-    number += '-' + form.section.toLowerCase().replace(' ', '');
+  const dept = form.department.toLowerCase().replace(' ', '');
+  let number = form.number.toLowerCase().replace(' ', '');
+  if (form.section.length) {
+    number = `${number}-${form.section.toLowerCase().replace(' ', '')}`;
+  }
 
   // Clean semester
-  var semester = form.semester.toLowerCase();
-  if (semester.indexOf('f') > -1)
-    semester = 'fall-';
-  else if (semester.indexOf('w') > -1)
-    semester = 'winter-';
-  else if (semester.indexOf('/') > -1)
-    semester = 'spring_summer-';
-  else if (semester.indexOf('p') > -1)
-    semester = 'spring-';
-  else if (semester.indexOf('u') > -1)
-    semester = 'summer-';
-  else
+  let semester = form.semester.toLowerCase();
+  if (semester.indexOf('f') > -1) {
+    semester = 'fall';
+  }
+  else if (semester.indexOf('w') > -1) {
+    semester = 'winter';
+  }
+  else if (semester.indexOf('/') > -1) {
+    semester = 'spring_summer';
+  }
+  else if (semester.indexOf('p') > -1) {
+    semester = 'spring';
+  }
+  else if (semester.indexOf('u') > -1) {
+    semester = 'summer';
+  }
+  else {
     semester = '';
-  semester += form.year.toLowerCase().replace(' ', '');
+  }
 
-  obj.label = number + '-' + semester;
+  // Add year
+  if (semester.length) {
+    semester = `${semester}-${form.year.toLowerCase().replace(' ', '')}`;
+  }
+  else {
+    semester = form.year.toLowerCase().replace(' ', '');
+  }
+
+  // Construct label
+  obj.label = `${dept}-${number}-${semester}`;
 
   return obj;
 }
 
-function addUsers(course_label, users, gitlab_access_level) {
-  var course;
-
+helpers.addUsers = function addUsers(courseLabel, users, gitlab_access_level) {
   return models.Course.findOne({
-    where: { label: course_label },
-  }).then(function(_course) {
-    course = _course;
+    where: { label: courseLabel },
+  }).then(_course => _course.addUsers(users, { gitlab_access_level }));
+};
 
-    return course.addUsers(users, { gitlab_access_level: gitlab_access_level });
-  });
-}
+helpers.create = function create(userId, form) {
+  const courseOb = getCourseObject(form);
 
-function create(user_id, form) {
-  var user, course;
-  var courseOb = getCourseObject(form);
+  return models.User.findById(userId).then(
+    _user => _user.createCourse(courseOb, { gitlab_access_level: 50 })
+  );
+};
 
-  // Add course to DB
-  return models.User.findById(user_id).then(function(_user) {
-    user = _user;
-    return models.Course.create(courseOb);
-  }).then(function(_course) {
-    course = _course;
-    return user.addCourse(course, { gitlab_access_level: 50 });
-  }).then(function() {
-    return course;
-  });
-}
-
-function deleteCourse(course_label) {
+helpers.deleteCourse = function deleteCourse(courseLabel) {
   return models.Course.destroy({
-    where: { label: course_label },
+    where: { label: courseLabel },
   });
-}
+};
 
-function get(course_label) {
+helpers.get = function get(courseLabel) {
   return models.Course.findOne({
-    where: { label: course_label },
+    where: { label: courseLabel },
   });
-}
+};
 
-function getCoursesTaken(user_id) {
+helpers.getCoursesTaken = function getCoursesTaken(userId) {
   return models.Course.findAll({
     include: [{
       model: models.User,
-      where: { id: user_id },
+      where: { id: userId },
       through: { where: { gitlab_access_level: 30 } },
     }],
   });
-}
+};
 
-function getCoursesTaught(user_id) {
+helpers.getCoursesTaught = function getCoursesTaught(userId) {
   return models.Course.findAll({
     include: [{
       model: models.User,
-      where: { id: user_id },
-      through: { where: { gitlab_access_level: [20, 40, 50] } },
+      where: { id: userId },
+      through: { where: { gitlab_access_level: [40, 50] } },
     }],
   });
-}
+  // return models.User.findById(userId)
+  //   .then(_user => _user.getCourses({ gitlab_access_level: [40, 50] }));
+};
 
-function isStaff(user_username, course_label) {
+helpers.isStaff = function isStaff(username, courseLabel) {
   return models.Course.count({
-    where: { label: course_label },
+    where: { label: courseLabel },
     include: [{
       model: models.User,
-      where: { username: user_username },
-      through: { where: { gitlab_access_level: [20, 40, 50] } },
+      where: { username },
+      through: { where: { gitlab_access_level: [40, 50] } },
     }],
-  }).then(function(_count) {
-    return _count !== 0;
-  });
-}
+  }).then(_count => Promise.resolve(Boolean(_count)));
+};
 
-function removeUser(course_label, username) {
-  var course;
+helpers.removeUser = function removeUser(courseLabel, username) {
+  return Promise.all([
+    models.Course.findOne({ where: { label: courseLabel } }),
+    models.User.findOne({ where: { username } }),
+  ]).spread((_course, _user) => _course.removeUser(_user));
+};
 
-  return models.Course.findOne({
-    where: { label: course_label },
-  }).then(function(_course) {
-    course = _course;
+helpers.update = function update(courseLabel, form) {
+  const courseOb = getCourseObject(form);
 
-    return models.User.findOne({
-      where: { username: user_username },
-    });
-  }).then(function(_user) {
-    return course.removeUser(_user);
-  });
-}
-
-function update(course_label, form) {
-  var courseOb = getCourseObject(form);
-
-  return models.Course.findOne({
-    where: { label: course_label },
-  }).then(function(_course) {
-    return _course.update(courseOb);
-  });
-}
-
-module.exports = {
-  addUsers,
-  create,
-  deleteCourse,
-  getCoursesTaken,
-  getCoursesTaught,
-  isStaff,
-  removeUser,
-  update,
-  get: get,
+  return models.Course.findOne({ where: { label: courseLabel } })
+    .then(_course => _course.update(courseOb));
 };
