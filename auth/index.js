@@ -28,4 +28,6 @@ fs
     passport.use(filename, require(path.join(__dirname, 'strategies', basename)));
   });
 
-module.exports = passport;
+module.exports = {
+  passport
+};

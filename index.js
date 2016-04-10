@@ -1,12 +1,13 @@
+'use strict';
 const express = require('express');
 const expressWinston = require('express-winston');
-const passport = require('passport');
 // const util = require('util');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 // const partials = require('express-partials');
 const log = require('./helpers/log');
+const passport = require('./auth').passport;
 
 const app = express();
 app.locals.pretty = true;
