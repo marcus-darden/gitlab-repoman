@@ -1,3 +1,4 @@
+'use strict';
 const models = require('../models');
 const helpers = module.exports = {};
 

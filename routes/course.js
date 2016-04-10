@@ -1,3 +1,4 @@
+'use strict';
 const express = require('express');
 const error = require('../helpers/error');
 const middleware = require('../helpers/middleware');

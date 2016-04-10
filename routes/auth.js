@@ -1,9 +1,11 @@
 const express = require('express');
 const passport = require('passport');
+const log = require('../helpers/log');
+
 const router = express.Router();
 
 function logAll(req, res, next) {
-  console.log('%s %s %s', req.method, req.url, req.path);
+  log.info('%s %s %s', req.method, req.url, req.path);
   next();
 }
 

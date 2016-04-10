@@ -1,6 +1,6 @@
-const error = module.exports = {};
+const helpers = module.exports = {};
 
-error.handler = function handler(next, message) {
+helpers.handler = function handler(next, message) {
   return e => next(e);
 //  return function (e) {
 //    if (!(e instanceof error.BaseError)) {

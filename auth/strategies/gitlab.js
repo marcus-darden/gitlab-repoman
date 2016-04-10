@@ -1,6 +1,7 @@
 const GitlabStrategy = require('passport-gitlab').Strategy;
 const config = require('../../config');
 const error = require('../../helpers/error');
+const log = require('../../helpers/log');
 const gitlabHelper = require('../../helpers/gitlab');
 
 const gitlabOptions = {
@@ -14,9 +15,9 @@ function gitlabVerify(token, tokenSecret, profile, done) {
   return gitlabHelper.login(token, profile).then((_user) => {
     const u = _user.get();
     u.oauth_token = token;
-    console.log(`OAUTH_TOKEN: ${token}`);
+    log.info(`OAUTH_TOKEN: ${token}`);
     return done(null, u);
-  }).catch(error.helper(done, 'Unable to log in to Gitlab server.'));
+  }).catch(error.handler(done, 'Unable to log in to Gitlab server.'));
 }
 
 module.exports = new GitlabStrategy(gitlabOptions, gitlabVerify);

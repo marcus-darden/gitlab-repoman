@@ -11,7 +11,7 @@ module.exports = new winston.Logger({
   transports: [
     new winston.transports.Console({
       level: config.logLevel,
-      handleExceptions: true
-    })
-  ]
+      handleExceptions: true,
+    }),
+  ],
 });

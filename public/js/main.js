@@ -1,3 +1,5 @@
+const log = require('../../helpers/log');
+
 $(document).ready(() => {
   function updateBtns(btns) {
     const key = btns || $('input[name=\'team_id\']').val();
@@ -37,7 +39,7 @@ $(document).ready(() => {
       },
       dataType: 'json',
       success(data) {
-        console.log(data);
+        log.info(data);
 
         if (data.error) {
           alert(data.error);
@@ -50,7 +52,7 @@ $(document).ready(() => {
         setTimeout(() => $('#save').html(oldText), 2000);
       },
       error(data) {
-        console.log(data);
+        log.info(data);
         alert(`Something is wrong!\nBother Otto and give him this: \n\n${data}`);
       },
     });
@@ -59,11 +61,11 @@ $(document).ready(() => {
   $('.new_team').click(() => {
     const key = Math.random().toString(36).substring(7);
     $.post('/key', { key }, (data) => {
-            // console.log('Pre-key: ' + key);
+            // log.info('Pre-key: ' + key);
       $('input[name=\'team_id\']').val(key);
-            // console.log('Input-key: ' + $('input[name='team_id']').val());
+            // log.info('Input-key: ' + $('input[name='team_id']').val());
       updateBtns(key);
-      console.log(data);
+      log.info(data);
       saveUserInfo(null);
     });
   });
@@ -81,7 +83,7 @@ $(document).ready(() => {
       name: $('input[name=\'name\']').val(),
     };
 
-    console.log(obj);
+    log.info(obj);
     $.ajax({
       url: `/team/${$('input[name=\'id\']').val()}`,
       type: 'POST',
@@ -91,7 +93,7 @@ $(document).ready(() => {
       },
       dataType: 'json',
       success(data) {
-        console.info(data);
+        log.info(data);
       },
     });
   });

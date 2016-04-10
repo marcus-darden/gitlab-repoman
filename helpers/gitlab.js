@@ -53,9 +53,9 @@ helpers.createGroup = function createGroup(token, course) {
 helpers.login = function login(token, profile) {
   // Condition profile to provide the following (default in gitlab)
   // { username, id, displayName, avatar, }
-  return userHelper.login(profile).then((_dbUser) => {
-    helpers.setGitlabUserId(token, _dbUser);
-  });
+  return userHelper.login(profile).then(
+    _dbUser => helpers.setGitlabUserId(token, _dbUser)
+  );
 };
 
 helpers.setGitlabUserId = function setGitlabUserId(token, dbUser) {
