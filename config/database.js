@@ -1,4 +1,4 @@
-const config = {
+module.exports = {
   development: {
     username: 'repoman',
     password: 'repoman',
@@ -34,5 +34,3 @@ const config = {
     },
   },
 };
-
-module.exports = config;

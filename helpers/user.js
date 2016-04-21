@@ -2,6 +2,10 @@
 const models = require('../models');
 const helpers = module.exports = {};
 
+//
+// BEGIN HELPERS
+//
+
 helpers.get = function get(user_username) {
   return models.User.findOne({
     where: { username: user_username },
@@ -35,7 +39,9 @@ helpers.getUsers = function getUsers(usernames) {
 
   // Find or Create the users, as necessary
   const users = usernames.map((username) =>
-    models.User.findOrCreate({ where: { username } })
+    models.User.findOrCreate({
+      where: { username },
+    })
   );
   // for (i = 0; i < usernames.length; i++) {
     // users[i] = models.User.findOrCreate({
@@ -55,12 +61,18 @@ helpers.getUsers = function getUsers(usernames) {
 helpers.login = function login(profile) {
   return models.User.findOrCreate({
     where: { username: profile.username },
-  }).spread((_user) =>
-    // Update user properties from GL
-    _user.update({
+  }).spread((_user, _created) => {
+    // Update user properties from GL profile
+    if (_created) {
+      return _user.update({
+        display_name: profile.displayName,
+        avatar: profile.avatar,
+        gitlab_user_id: profile.id,
+      });
+    }
+    return _user.update({
       display_name: profile.displayName,
       avatar: profile.avatar,
-      gitlab_user_id: profile.id,  // Maybe first time only
-    })
-  );
+    });
+  });
 };

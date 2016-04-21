@@ -1,6 +1,8 @@
+const database = require('./database');
+
 module.exports = {
   // Database config (imported from database.js)
-  database: require('./database'),  // TODO add the fs require mechanism
+  database,
 
   // Gitlab parameters
   GITLAB_APP_KEY: process.env.GITLAB_APP_KEY

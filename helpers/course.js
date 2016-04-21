@@ -49,6 +49,10 @@ function getCourseObject(form) {
   return obj;
 }
 
+//
+// BEGIN HELPERS
+//
+
 helpers.addUsers = function addUsers(courseLabel, users, gitlab_access_level) {
   return models.Course.findOne({
     where: { label: courseLabel },
@@ -58,8 +62,8 @@ helpers.addUsers = function addUsers(courseLabel, users, gitlab_access_level) {
 helpers.create = function create(userId, form) {
   const courseOb = getCourseObject(form);
 
-  return models.User.findById(userId).then(
-    _user => _user.createCourse(courseOb, { gitlab_access_level: 50 })
+  return models.User.findById(userId).then(_user =>
+    _user.createCourse(courseOb, { gitlab_access_level: 50 })
   );
 };
 

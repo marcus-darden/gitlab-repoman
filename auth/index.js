@@ -3,7 +3,6 @@ const path = require('path');
 const passport = require('passport');
 const models = require('../models');
 const error = require('../helpers/error');
-const log = require('../helpers/log');
 
 passport.serializeUser((user, done) => {
   done(null, {
@@ -29,5 +28,5 @@ fs
   });
 
 module.exports = {
-  passport
+  passport,
 };

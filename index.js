@@ -49,4 +49,9 @@ app.use(expressWinston.errorLogger({
   level: 'error',
 }));
 
-app.listen(3000);
+if (!module.parent) {
+  app.listen(3000);
+}
+else {
+  module.exports = app;
+}

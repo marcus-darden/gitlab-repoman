@@ -40,6 +40,10 @@ function getAssignmentObject(form) {
   return obj;
 }
 
+//
+// BEGIN HELPERS
+//
+
 helpers.create = function create(courseLabel, form) {
   const assignmentOb = getAssignmentObject(form);
 
